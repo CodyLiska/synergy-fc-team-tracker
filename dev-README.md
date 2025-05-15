@@ -26,7 +26,7 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
   - [ ] parents name
   - [ ] parnets contact info (phone, email, etc)
 - ACTIVITY TABLE
-- [ ] delete button for game outcomes isn't deleting from the table
+- [x] delete button for game outcomes isn't deleting from the table
 - [ ] possible have it update with data from sport easy app
 - SUMMARY PAGES
 - [ ] add a summary page to display all games played
