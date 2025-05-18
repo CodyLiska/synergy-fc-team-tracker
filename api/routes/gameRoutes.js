@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const Game = require("../models/Game");
-const Player = require("../models/Player");
+const Game = require("../../api/models/Game");
+const Player = require("../../api/models/Player");
 
 router.post("/", async (req, res) => {
   try {

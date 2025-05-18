@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const Player = require("../models/Player");
-const ArchivedPlayer = require("../models/ArchivedPlayer");
-const Game = require("../models/Game");
+const Player = require("../../api/models/Player");
+const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
+const Game = require("../../api/models/Game");
 
 // Get all players
 router.get("/", async (req, res) => {
