@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = "http://localhost:5500/api/team-stats";
+const API_URL = `${import.meta.env.VITE_API_URL}/team-stats`;
 
 export const teamStatsService = {
   async getTeamStats() {

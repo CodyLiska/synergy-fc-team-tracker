@@ -56,7 +56,7 @@ const submitForm = async () => {
       ...form.value,
       date: form.value.date ? new Date(form.value.date).toISOString() : '',
     };
-    await axios.post('http://localhost:5000/api/games', payload);
+    await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
     ElMessage.success('Game outcome added!');
     router.push('/coach');
   } catch (err) {

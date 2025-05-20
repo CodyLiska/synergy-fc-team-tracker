@@ -236,7 +236,7 @@ const goToAddActivity = () => {
 const fetchRecentGames = async () => {
   try {
     // Fetch the most recent games, e.g., last 5
-    const response = await axios.get('http://localhost:5000/api/games?limit=5&sort=-date');
+    const response = await axios.get(`${import.meta.env.VITE_API_URL}/games?limit=5&sort=-date`);
     recentGames.value = response.data;
   } catch (error) {
     console.error('Error fetching recent games:', error);
@@ -278,7 +278,7 @@ const handleDeleteRecent = async (row) => {
   try {
     if (row.activity === 'Game Outcome') {
       // Delete game
-      await axios.delete(`http://localhost:5000/api/games/${row._id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/games/${row._id}`);
       await fetchRecentGames();
     } else {
       // Delete activity

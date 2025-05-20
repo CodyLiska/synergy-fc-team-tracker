@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { body, param, validationResult } = require("express-validator");
 const RecentActivity = require("../../api/models/RecentActivity");
 
 // GET /api/recent-activity
@@ -15,18 +16,37 @@ router.get("/", async (req, res) => {
 });
 
 // POST /api/recent-activity
-router.post("/", async (req, res) => {
-  try {
-    const { date, player, activity, details } = req.body;
-    const newActivity = new RecentActivity({ date, player, activity, details });
-    await newActivity.save();
-    res.status(201).json(newActivity);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-});
+router.post(
+  "/",
+  [
+    body("date").isISO8601(),
+    body("player").isString().trim().notEmpty(),
+    body("activity").isString().trim().notEmpty(),
+    body("details").isString().trim().optional(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-router.delete("/:id", async (req, res) => {
+    const { date, player, activity, details } = req.body;
+    try {
+      const newActivity = new RecentActivity({
+        date,
+        player,
+        activity,
+        details,
+      });
+      await newActivity.save();
+      res.status(201).json(newActivity);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  }
+);
+
+router.delete("/:id", [param("id").isMongoId()], async (req, res) => {
   try {
     await RecentActivity.findByIdAndDelete(req.params.id);
     res.status(204).end();

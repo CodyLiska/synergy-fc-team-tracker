@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { body, param, validationResult } = require("express-validator");
 const Player = require("../../api/models/Player");
 const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
 const Game = require("../../api/models/Game");
@@ -15,29 +16,59 @@ router.get("/", async (req, res) => {
 });
 
 // Get single player
-router.get("/:id", getPlayer, (req, res) => {
+router.get("/:id", [param("id").isMongoId()], getPlayer, (req, res) => {
   res.json(res.player);
 });
 
 // Create a player
-router.post("/", async (req, res) => {
-  const player = new Player({
-    name: req.body.name,
-    number: req.body.number,
-    position: req.body.position,
-    psychological: req.body.psychological,
-    physical: req.body.physical,
-    socialEmotional: req.body.socialEmotional,
-    technical: req.body.technical,
-  });
+router.post(
+  "/",
+  [
+    body("name").isString().trim().notEmpty(),
+    body("number").isInt({ min: 0 }),
+    body("position").isString().trim().notEmpty(),
+  ],
+  async (req, res) => {
+    console.log("Received payload:", req.body);
 
-  try {
-    const newPlayer = await player.save();
-    res.status(201).json(newPlayer);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const player = new Player({
+      name: req.body.name,
+      number: req.body.number,
+      position: req.body.position,
+    });
+    console.log("Player object created:", player);
+    try {
+      const newPlayer = await player.save();
+      res.status(201).json(newPlayer);
+    } catch (error) {
+      console.error("Error saving player:", error);
+      res.status(400).json({ message: error.message });
+    }
   }
-});
+);
+// router.post("/", async (req, res) => {
+//   const player = new Player({
+//     name: req.body.name,
+//     number: req.body.number,
+//     position: req.body.position,
+//     psychological: req.body.psychological,
+//     physical: req.body.physical,
+//     socialEmotional: req.body.socialEmotional,
+//     technical: req.body.technical,
+//   });
+
+//   try {
+//     const newPlayer = await player.save();
+//     res.status(201).json(newPlayer);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// });
 
 // Update a player
 router.patch("/:id", getPlayer, async (req, res) => {

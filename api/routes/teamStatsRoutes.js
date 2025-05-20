@@ -1,9 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const rateLimit = require("express-rate-limit");
 const Player = require("../../api/models/Player");
 const Game = require("../../api/models/Game");
 
-router.get("/", async (req, res) => {
+const statsLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10, // limit each IP to 10 requests per minute
+});
+
+router.get("/", statsLimiter, async (req, res) => {
   try {
     const totalPlayers = await Player.countDocuments();
     const gamesPlayed = await Game.countDocuments();

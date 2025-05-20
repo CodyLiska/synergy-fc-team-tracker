@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_URL = "http://localhost:5500/api/recent-activity";
+const API_URL = `${import.meta.env.VITE_API_URL}/recent-activity`;
 
 export const recentActivityService = {
   async getRecentActivity() {
@@ -13,5 +13,5 @@ export const recentActivityService = {
   },
   async deleteActivity(id) {
     await axios.delete(`${API_URL}/${id}`);
-  }
+  },
 };

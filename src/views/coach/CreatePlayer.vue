@@ -4,15 +4,22 @@
     <form @submit.prevent="handleSubmit">
       <div>
         <label for="name">Name:</label>
-        <input v-model="player.name" id="name" required />
+        <input v-model="player.name" id="name" required pattern="^[a-zA-Z\s'\-]{1,50}$"
+          title="Only letters, spaces, hyphens, or apostrophes (max 50 characters)" />
       </div>
       <div>
         <label for="number">Number:</label>
-        <input v-model="player.number" id="number" type="number" required />
+        <input v-model="player.number" id="number" type="number" min="0" max="99" required />
       </div>
       <div>
         <label for="position">Position:</label>
-        <input v-model="player.position" id="position" required />
+        <select v-model="player.position" id="position" required>
+          <option value="" disabled>Select position</option>
+          <option value="Forward">Forward</option>
+          <option value="Midfielder">Midfielder</option>
+          <option value="Defender">Defender</option>
+          <option value="Goalkeeper">Goalkeeper</option>
+        </select>
       </div>
       <button type="submit">Add Player</button>
     </form>
@@ -23,8 +30,10 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { playerService } from '../../services/playerService';
+import { ElNotification } from 'element-plus'
 
 const router = useRouter();
+
 const player = ref({
   name: '',
   number: '',
@@ -32,13 +41,26 @@ const player = ref({
 });
 
 const handleSubmit = async () => {
+  const payload = {
+    name: player.value.name.trim(),
+    number: Number(player.value.number),
+    position: player.value.position.trim(),
+  }
+  console.log('Sending player payload:', payload)
   try {
-    await playerService.createPlayer(player.value);
-    alert('Player created successfully!');
+    await playerService.createPlayer(payload);
+    ElNotification({
+      title: 'Success',
+      message: 'Player created successfully!',
+      type: 'success',
+    });
     router.push('/coach');
   } catch (error) {
-    alert('Failed to create player. Check the console for details.');
-    console.error(error);
+    ElNotification({
+      title: 'Error',
+      message: 'Failed to create player. Please try again.',
+      type: 'error',
+    });
   }
 };
 </script>

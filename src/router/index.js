@@ -13,6 +13,18 @@ const routes = [
   { path: "/add-activity", name: "AddActivity", component: AddActivity },
 ];
 
+// If implement login later, protect routes:
+// router.beforeEach((to, from, next) => {
+//   const isAuthenticated = localStorage.getItem("token"); // or Vuex/state
+//   const protectedRoutes = ["/coach", "/create-player", "/add-activity"];
+
+//   if (protectedRoutes.includes(to.path) && !isAuthenticated) {
+//     return next("/");
+//   }
+
+//   next();
+// });
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
