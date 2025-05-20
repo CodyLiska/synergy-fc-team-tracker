@@ -5,7 +5,9 @@
         <Header />
       </el-header>
       <el-main>
-        <slot /> <!-- Page-specific content will be injected here -->
+        <div class="main-content-wrapper">
+          <slot /> <!-- Page-specific content injected here -->
+        </div>
       </el-main>
       <el-footer height="auto">
         <Footer />
@@ -25,17 +27,22 @@ import Footer from './Footer.vue'
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
-  /* Prevent horizontal scrolling */
 }
 
 el-main {
   flex: 1;
   overflow: auto;
-  /* Enable scrolling for content inside the main area if needed */
 }
 
 el-footer {
   flex-shrink: 0;
-  /* Prevent the footer from shrinking */
+}
+
+.main-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
 }
 </style>

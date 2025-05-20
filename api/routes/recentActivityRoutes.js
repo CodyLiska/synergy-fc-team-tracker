@@ -19,10 +19,11 @@ router.get("/", async (req, res) => {
 router.post(
   "/",
   [
-    body("date").isISO8601(),
-    body("player").isString().trim().notEmpty(),
-    body("activity").isString().trim().notEmpty(),
-    body("details").isString().trim().optional(),
+    // ** TODO: THIS CAUSES A BAD REQUEST ERROR **
+    // body("date").isISO8601(),
+    // body("player").isString().trim().notEmpty(),
+    // body("activity").isString().trim().notEmpty(),
+    // body("details").isString().trim().optional(),
   ],
   async (req, res) => {
     const errors = validationResult(req);

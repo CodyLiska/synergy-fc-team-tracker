@@ -17,8 +17,7 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
   - [x] Trash Can Icon for Recent Activity doesn't delete the activity and it should also refresh the list
   - [x] Team Stats > Win Rate needs to be calculated, currently it's hardcoded to 0%
   - [x] Team Stats > Team Rating needs to be calculated, currently it's hardcoded to 0
-  - [ ] page doesn't refresh when a player is archived
-  - [ ] make the font in the chart look better
+  - [x] page doesn't refresh when a player is archived
   
 - PLAYERS CARDS
   - [x] Add a Delete button next to view details for each card and the functionality to delete a player
@@ -26,7 +25,7 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 - IN THE MODAL
   - [x] Update the modal to display the player's skills hierarchy data
   - [x] Add a player update button with a form to update the player's skills hierarchy data
-  - [ ] EDIT PLAYER MODAL needs to be wider, font goes off screen
+  - [] EDIT PLAYER MODAL needs to be wider, font goes off screen
   
 - PLAYER MODEL
 - [ ] add robustness to the model
@@ -40,8 +39,9 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 - SUMMARY PAGES
 - [ ] add a summary page to display all games played
 
-## Down the road
+## Down the road (NICE TO HAVE)
 - [ ] implement a better color scheme - TEMPORARY FOR NOW
   - the overall layout 
   - bar graph colors
 - [ ] to delete a row from RecentActivity, you have to click into it to display a modal, then click the delete button.
+- [ ] make the font in the Team Skills Overview chart look better.

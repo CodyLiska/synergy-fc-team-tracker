@@ -7,6 +7,7 @@ const Player = require("../../api/models/Player");
 router.post(
   "/",
   [
+    // ** TODO: THIS CAUSES A BAD REQUEST ERROR **
     // body("opponent").isString().trim().notEmpty(),
     // body("date").isISO8601(),
     // body("score").isString().notEmpty(),

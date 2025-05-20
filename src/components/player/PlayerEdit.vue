@@ -1,23 +1,25 @@
 <template>
-  <el-dialog :model-value="visible" title="Edit Player" width="500px" @close="handleClose">
-    <el-form :model="form" label-width="120px">
-      <el-form-item label="Name">
-        <el-input v-model="form.name" required />
-      </el-form-item>
-      <el-form-item label="Number">
-        <el-input v-model.number="form.number" type="number" min="0" required />
-      </el-form-item>
-      <el-form-item label="Position">
-        <el-input v-model="form.position" required />
-      </el-form-item>
-
-      <template v-for="(skills, category) in skillCategories" :key="category">
-        <el-divider>{{ category }}</el-divider>
-        <el-form-item v-for="skill in skills" :key="skill" :label="skill">
-          <el-input v-model.number="form[categoryKey(category)][skill]" type="number" :min="0" :max="10" />
+  <el-dialog :model-value="visible" title="Edit Player" width="700px" @close="handleClose">
+    <div class="edit-player-dialog-body">
+      <el-form :model="form" label-width="140px" class="edit-player-form">
+        <el-form-item label="Name">
+          <el-input v-model="form.name" required />
         </el-form-item>
-      </template>
-    </el-form>
+        <el-form-item label="Number">
+          <el-input v-model.number="form.number" type="number" min="0" required />
+        </el-form-item>
+        <el-form-item label="Position">
+          <el-input v-model="form.position" required />
+        </el-form-item>
+
+        <template v-for="(skills, category) in skillCategories" :key="category">
+          <el-divider>{{ category }}</el-divider>
+          <el-form-item v-for="skill in skills" :key="skill" :label="skill.replace(/_/g, ' ')" class="skill-form-item">
+            <el-input v-model.number="form[categoryKey(category)][skill]" type="number" :min="0" :max="10" />
+          </el-form-item>
+        </template>
+      </el-form>
+    </div>
     <template #footer>
       <el-button @click="handleClose">Cancel</el-button>
       <el-button type="primary" @click="submit">Save</el-button>
@@ -36,41 +38,41 @@ const emit = defineEmits(['update:visible', 'player-updated']);
 
 const skillCategories = {
   psychological: [
-    "SELF_CONFIDENCE",
-    "COMPETITIVENESS",
-    "CONCENTRATION",
-    "SELF_CONTROL",
-    "DETERMINATION",
-    "ENJOYMENT"
+    "selfConfidence",
+    "competitiveness",
+    "concentration",
+    "selfControl",
+    "determination",
+    "enjoyment"
   ],
   physical: [
-    "AGILITY",
-    "BALANCE",
-    "COORDINATION",
-    "STAMINA",
-    "STRENGTH",
-    "SPEED",
-    "ACCELERATION",
-    "REACTION"
+    "agility",
+    "balance",
+    "coordination",
+    "stamina",
+    "strength",
+    "speed",
+    "acceleration",
+    "reaction"
   ],
   socialEmotional: [
-    "LISTENING",
-    "COOPERATION",
-    "COMMUNICATION",
-    "SHARING",
-    "PROBLEM_SOLVING",
-    "DECISION_MAKING",
-    "EMPATHY",
-    "PATIENCE",
-    "RESPECT_DISCIPLINE"
+    "listening",
+    "cooperation",
+    "communication",
+    "sharing",
+    "problemSolving",
+    "decisionMaking",
+    "empathy",
+    "patience",
+    "respectDiscipline"
   ],
   technical: [
-    "DRIBBLING",
-    "SHOOTING",
-    "RUNNING_WITH_BALL",
-    "TURNING_WITH_BALL",
-    "RECEIVING_THE_BALL",
-    "PASSING"
+    "dribbling",
+    "shooting",
+    "runningWithBall",
+    "turningWithBall",
+    "receivingTheBall",
+    "passing"
   ]
 };
 
@@ -117,3 +119,31 @@ function submit() {
   handleClose();
 }
 </script>
+
+<style scoped>
+.edit-player-dialog-body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.edit-player-form {
+  min-width: 0;
+}
+
+.skill-form-item .el-form-item__label {
+  white-space: normal;
+  word-break: break-word;
+  max-width: 120px;
+}
+
+@media (max-width: 800px) {
+  .el-dialog {
+    width: 98vw !important;
+    min-width: 0 !important;
+  }
+
+  .edit-player-dialog-body {
+    max-height: 50vh;
+  }
+}
+</style>

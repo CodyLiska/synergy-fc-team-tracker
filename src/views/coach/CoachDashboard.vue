@@ -3,31 +3,58 @@
     <div class="main-container">
       <div class="coach-dashboard">
 
-        <StatsRow :statsArray="statsArray" />
-        <div class="add-game-outcome-button">
-          <el-button type="primary" @click="navigateToAddGameOutcome" style="margin-top: 10px;">Add Game
-            Outcome</el-button>
+        <!-- Team Stats Section -->
+        <div class="section-card">
+          <h2 class="section-heading"><el-icon>
+              <TrendCharts />
+            </el-icon>Team Stats</h2>
+          <StatsRow :statsArray="statsArray" />
+          <div class="add-game-outcome-button">
+            <el-button type="primary" @click="navigateToAddGameOutcome" style="margin-top: 10px;">Add Game
+              Outcome</el-button>
+          </div>
         </div>
 
-        <TeamSkillsChart :data="teamSkillsData" />
-        <div v-if="teamSkillsData.labels[0] === 'No Data Available'">
-          No player data available. Add players to see the chart.
+        <!-- Team Skills Chart Section -->
+        <div class="section-card team-skills-chart-section">
+          <h2 class="section-heading"><el-icon>
+              <DataAnalysis />
+            </el-icon> Team Skills Overview</h2>
+          <TeamSkillsChart :data="teamSkillsData" />
+          <div v-if="teamSkillsData.labels[0] === 'No Data Available'">
+            No player data available. Add players to see the chart.
+          </div>
         </div>
 
-        <!-- Add Player Button -->
-        <div class="add-player-button">
-          <el-button type="primary" @click="navigateToCreatePlayer">Add New Player</el-button>
+
+        <!-- Player Stats Section -->
+        <div class="section-card">
+          <h2 class="section-heading"><el-icon>
+              <User />
+            </el-icon> Player Stats</h2>
+          <div class="add-player-button">
+            <el-button type="primary" @click="navigateToCreatePlayer"><el-icon>
+                <Plus />
+              </el-icon> Add New Player</el-button>
+          </div>
+          <PlayerCards :players="players" :getAverage="getAverage" @player-archived="handlePlayerDataChanged"
+            @show-details="handleShowDetails" @player-updated="handlePlayerDataChanged" />
+
+          <PlayerDetail v-if="selectedPlayer" :player="selectedPlayer" :visible="playerDialogVisible"
+            @update:visible="playerDialogVisible = $event" />
         </div>
 
-        <!-- Player Cards -->
-        <PlayerCards :players="players" :getAverage="getAverage" @show-details="showPlayerDetails" />
-
-        <!-- Player Details Modal (full stats hierarchy) -->
-        <PlayerDetail v-if="selectedPlayer" :player="selectedPlayer" :visible="playerDialogVisible"
-          @update:visible="playerDialogVisible = $event" />
-
-        <RecentActivity :recentActivity="combinedRecent" @delete="handleDeleteRecent" />
-        <el-button type="primary" @click="goToAddActivity" style="margin-top: 10px;">Add Activity</el-button>
+        <!-- Recent Activity Section -->
+        <div class="section-card">
+          <h2 class="section-heading"><el-icon>
+              <Document />
+            </el-icon> Recent Activity</h2>
+          <div class="recent-activity-header">
+            <el-button type="primary" @click="goToAddActivity">Add Activity</el-button>
+          </div>
+          <RecentActivity :recentActivity="combinedRecent" @delete="handleDeleteRecent" />
+          <!-- <el-button type="primary" @click="goToAddActivity" style="margin-top: 10px;">Add Activity</el-button> -->
+        </div>
       </div>
     </div>
   </PageWrapper>
@@ -46,6 +73,8 @@ import PlayerCards from '../../components/dashboard/PlayerCards.vue';
 import PlayerDetail from '../../components/dashboard/PlayerDetail.vue';
 import RecentActivity from '../../components/dashboard/RecentActivity.vue';
 import axios from 'axios';
+import { Document, DataAnalysis, User, TrendCharts, Plus } from '@element-plus/icons-vue'
+
 
 // --- State and Logic ---
 const router = useRouter();
@@ -215,7 +244,13 @@ const fetchPlayers = async () => {
   }
 };
 
-const showPlayerDetails = (player) => {
+const handlePlayerDataChanged = async () => {
+  await fetchPlayers();
+  await fetchTeamSkillsData();
+  await fetchTeamStats();
+};
+
+const handleShowDetails = (player) => {
   selectedPlayer.value = player;
   playerDialogVisible.value = true;
 };
@@ -269,7 +304,6 @@ const combinedRecent = computed(() => {
     date: formatDate(act.date)
   }));
 
-
   // Combine and sort by date descending
   return [...mappedActivities, ...mappedGames].sort((a, b) => new Date(b.date) - new Date(a.date));
 });
@@ -307,6 +341,19 @@ onMounted(() => {
   padding: 0 16px;
   width: 100%;
   overflow-x: hidden;
+}
+
+.section-heading:not(:first-child) {
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+}
+
+.add-game-outcome-button,
+.add-player-button,
+.recent-activity-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
 }
 
 .coach-dashboard {

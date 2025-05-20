@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <div class="player-section-title">Player Stats</div>
+    <!-- <div class="player-section-title">Player Stats</div> -->
     <el-row :gutter="24" class="player-cards-row">
       <el-col :xs="24" :sm="12" :md="8" :lg="6" v-for="player in players" :key="player._id">
         <el-card class="player-card">
@@ -119,6 +119,8 @@ async function handlePlayerUpdated(updatedPlayer) {
 
 .player-cards-row {
   margin: 0;
+  justify-content: center;
+
 }
 
 .player-card {

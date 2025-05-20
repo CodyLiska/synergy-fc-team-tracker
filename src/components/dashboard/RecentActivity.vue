@@ -1,6 +1,10 @@
 <template>
   <div>
-    <h3>Recent Activity</h3>
+    <div class="filter-controls">
+      <el-button size="small" :type="showGamesOnly ? 'primary' : 'default'" @click="showGamesOnly = !showGamesOnly">
+        {{ showGamesOnly ? 'Show All' : 'Show Only Games' }}
+      </el-button>
+    </div>
     <table class="activity-table">
       <thead>
         <tr>
@@ -12,28 +16,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="recentActivity.length === 0">
+        <tr v-if="filteredActivity.length === 0">
           <td colspan="5">No activity yet.</td>
         </tr>
-        <tr v-for="activity in recentActivity" :key="activity._id">
+        <tr v-for="activity in paginatedActivity" :key="activity._id">
           <td>{{ activity.date }}</td>
           <td>{{ activity.player }}</td>
           <td>{{ activity.activity }}</td>
           <td>{{ activity.details }}</td>
-          <!-- <td class="delete-cell">
-            <span class="delete-icon" @click="deleteActivity(activity._id)" title="Delete">🗑️</span>
-          </td> -->
           <td class="delete-cell">
             <span class="delete-icon" @click="$emit('delete', activity)" title="Delete">🗑️</span>
           </td>
         </tr>
       </tbody>
     </table>
+    <div class="pagination-controls" v-if="totalPages > 1">
+      <el-button size="small" :disabled="currentPage === 1" @click="prevPage">Previous</el-button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <el-button size="small" :disabled="currentPage === totalPages" @click="nextPage">Next</el-button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, ref, computed } from 'vue';
 // import { recentActivityService } from '../../services/recentActivityService';
 
 const props = defineProps({
@@ -42,6 +48,38 @@ const props = defineProps({
     required: true
   }
 });
+
+const pageSize = 5;
+const currentPage = ref(1);
+const showGamesOnly = ref(false);
+
+// Filter for games only (adjust 'Game' to match your activity value for games)
+const filteredActivity = computed(() => {
+  if (showGamesOnly.value) {
+    return props.recentActivity.filter(a => a.activity === 'Game Outcome');
+  }
+  return props.recentActivity;
+});
+
+// Sort newest first
+const sortedActivity = computed(() =>
+  [...filteredActivity.value].sort((a, b) => new Date(b.date) - new Date(a.date))
+);
+
+const totalPages = computed(() => Math.ceil(props.recentActivity.length / pageSize));
+
+const paginatedActivity = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  return sortedActivity.value.slice(start, start + pageSize);
+});
+
+function nextPage() {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+}
+
+function prevPage() {
+  if (currentPage.value > 1) currentPage.value--;
+}
 </script>
 
 <style scoped>
@@ -109,5 +147,18 @@ const props = defineProps({
 
 .delete-icon:hover {
   color: darkred;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
+}
+
+.filter-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
 }
 </style>

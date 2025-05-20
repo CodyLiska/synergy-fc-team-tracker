@@ -14,8 +14,7 @@
 </template>
 
 <script setup>
-// import { ref, onMounted, watch } from 'vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const navigationItems = [
@@ -25,6 +24,14 @@ const navigationItems = [
 
 const route = useRoute()
 const activeMenu = ref(route.path)
+
+// Watch for route changes and update activeMenu
+watch(
+  () => route.path,
+  (newPath) => {
+    activeMenu.value = newPath
+  }
+)
 
 // const isDark = ref(false)
 
