@@ -12,6 +12,9 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-if="recentActivity.length === 0">
+          <td colspan="5">No activity yet.</td>
+        </tr>
         <tr v-for="activity in recentActivity" :key="activity._id">
           <td>{{ activity.date }}</td>
           <td>{{ activity.player }}</td>

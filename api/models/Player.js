@@ -4,6 +4,7 @@ const playerSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    trim: true,
   },
   number: {
     type: Number,
@@ -12,6 +13,7 @@ const playerSchema = new mongoose.Schema({
   position: {
     type: String,
     required: true,
+    trim: true,
   },
   psychological: {
     type: Map,

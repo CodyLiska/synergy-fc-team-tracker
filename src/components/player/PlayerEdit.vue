@@ -2,19 +2,19 @@
   <el-dialog :model-value="visible" title="Edit Player" width="500px" @close="handleClose">
     <el-form :model="form" label-width="120px">
       <el-form-item label="Name">
-        <el-input v-model="form.name" />
+        <el-input v-model="form.name" required />
       </el-form-item>
       <el-form-item label="Number">
-        <el-input v-model="form.number" type="number" />
+        <el-input v-model.number="form.number" type="number" min="0" required />
       </el-form-item>
       <el-form-item label="Position">
-        <el-input v-model="form.position" />
+        <el-input v-model="form.position" required />
       </el-form-item>
 
       <template v-for="(skills, category) in skillCategories" :key="category">
         <el-divider>{{ category }}</el-divider>
         <el-form-item v-for="skill in skills" :key="skill" :label="skill">
-          <el-input v-model.number="form[categoryKey(category)][skill]" type="number" min="0" max="10" />
+          <el-input v-model.number="form[categoryKey(category)][skill]" type="number" :min="0" :max="10" />
         </el-form-item>
       </template>
     </el-form>
@@ -108,8 +108,12 @@ function handleClose() {
   emit('update:visible', false);
 }
 
-async function submit() {
-  emit('player-updated', { ...form, _id: props.player._id });
+function submit() {
+  if (!form.name || !form.position || form.number === '') {
+    ElMessage.error("Name, Number, and Position are required.");
+    return;
+  }
+  emit("player-updated", { ...form, _id: props.player._id });
   handleClose();
 }
 </script>

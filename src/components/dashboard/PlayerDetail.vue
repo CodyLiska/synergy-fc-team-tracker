@@ -1,7 +1,8 @@
 <!-- EVENTUALLY MOVE TO src/components/player/PlayerDetail.vue -->
 
 <template>
-  <el-dialog :model-value="localVisible" :title="`Player Details: ${player.name}`" width="400px" @close="handleClose">
+  <el-dialog :model-value="localVisible" :title="player?.name ? `Player Details: ${player.name}` : 'Player Details'"
+    width="400px" @close="handleClose">
     <div class="player-basic">
       <div><strong>Name:</strong> {{ player.name }}</div>
       <div><strong>Number:</strong> {{ player.number }}</div>

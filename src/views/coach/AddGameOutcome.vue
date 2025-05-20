@@ -55,7 +55,14 @@ const submitForm = async () => {
     const payload = {
       ...form.value,
       date: form.value.date ? new Date(form.value.date).toISOString() : '',
+      opponent: form.value.opponent.trim(),
+      result: form.value.result,
     };
+    if (!payload.opponent || !payload.date || !payload.result) {
+      ElMessage.error("Please fill all required fields.");
+      return;
+    }
+
     await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
     ElMessage.success('Game outcome added!');
     router.push('/coach');

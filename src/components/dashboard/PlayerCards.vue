@@ -50,7 +50,7 @@ defineProps({
   players: Array,
   getAverage: Function
 });
-defineEmits(['show-details', 'player-archived']);
+const emit = defineEmits(["show-details", "player-archived", "player-updated"]);
 
 const deleteDialogVisible = ref(false);
 const playerToDelete = ref(null);
@@ -84,8 +84,8 @@ async function confirmDelete() {
     // Notify parent to refresh player list
     // (emit an event or call a prop function as needed)
     // Example:
-    // emit('player-archived');
-    window.location.reload(); // Or use a better state update if available
+    emit('player-archived');
+    // window.location.reload(); // Or use a better state update if available
   } catch (err) {
     ElMessage.error('Failed to archive player.');
   }
@@ -95,7 +95,8 @@ async function handlePlayerUpdated(updatedPlayer) {
   try {
     await playerService.updatePlayer(updatedPlayer._id, updatedPlayer);
     ElMessage.success('Player updated!');
-    window.location.reload();
+    emit('player-updated', updatedPlayer);
+    // window.location.reload();
   } catch (err) {
     ElMessage.error('Failed to update player.');
   }
