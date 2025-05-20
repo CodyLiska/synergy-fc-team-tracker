@@ -61,7 +61,7 @@ A modern, full-stack team management and player tracking application built with 
 
 3. **Install backend dependencies:**
    ```bash
-   cd end
+   cd api
    npm install
    ```
 

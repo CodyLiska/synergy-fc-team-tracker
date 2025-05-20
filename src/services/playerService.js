@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/players";
+const API_URL = "http://localhost:5500/api/players";
 
 export const playerService = {
   getAllPlayers: async () => {

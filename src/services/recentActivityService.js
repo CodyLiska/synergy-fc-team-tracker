@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:5000/api/recent-activity";
+const API_URL = "http://localhost:5500/api/recent-activity";
 
 export const recentActivityService = {
   async getRecentActivity() {
