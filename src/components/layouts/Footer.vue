@@ -25,6 +25,9 @@
   text-align: center;
   background: var(--footer-bg);
   color: var(--text-main);
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  box-sizing: border-box;
 }
 
 .footer-links,

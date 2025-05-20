@@ -14,7 +14,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+// import { ref, onMounted, watch } from 'vue'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const navigationItems = [
@@ -25,7 +26,7 @@ const navigationItems = [
 const route = useRoute()
 const activeMenu = ref(route.path)
 
-const isDark = ref(false)
+// const isDark = ref(false)
 
 // function toggleTheme() {
 //   isDark.value = !isDark.value
@@ -65,6 +66,9 @@ const isDark = ref(false)
   padding: 0 24px;
   background: var(--header-bg);
   color: var(--text-main);
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  box-sizing: border-box;
 }
 
 .logo {
