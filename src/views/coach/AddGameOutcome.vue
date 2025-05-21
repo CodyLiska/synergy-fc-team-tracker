@@ -35,7 +35,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
-import PageWrapper from '../../components/ui/PageWrapper.vue';
+import PageWrapper from '@/components/ui/PageWrapper.vue'
 
 const router = useRouter();
 
@@ -47,23 +47,24 @@ const form = ref({
     us: 0,
     them: 0,
   },
+  result: ''
 });
 
 const submitForm = async () => {
   try {
     // Format date as ISO string for backend
-    const payload = {
-      ...form.value,
-      date: form.value.date ? new Date(form.value.date).toISOString() : '',
-      opponent: form.value.opponent.trim(),
-      result: form.value.result,
-    };
-    if (!payload.opponent || !payload.date || !payload.result) {
-      ElMessage.error("Please fill all required fields.");
-      return;
-    }
+    // const payload = {
+    //   ...form.value,
+    //   date: form.value.date ? new Date(form.value.date).toISOString() : '',
+    //   opponent: form.value.opponent.trim(),
+    //   result: form.value.result,
+    // };
+    // if (!payload.opponent || !payload.date || !payload.result) {
+    //   ElMessage.error("Please fill all required fields.");
+    //   return;
+    // }
 
-    await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
+    await axios.post(`${import.meta.env.VITE_API_URL}/games`, form.value);
     ElMessage.success('Game outcome added!');
     router.push('/coach');
   } catch (err) {
