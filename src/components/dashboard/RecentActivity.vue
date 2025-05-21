@@ -25,7 +25,7 @@
           <td>{{ activity.activity }}</td>
           <td>{{ activity.details }}</td>
           <td class="delete-cell">
-            <span class="delete-icon" @click="$emit('delete', activity)" title="Delete">🗑️</span>
+            <span class="delete-icon" @click="confirmDelete(activity)" title="Delete">🗑️</span>
           </td>
         </tr>
       </tbody>
@@ -53,7 +53,7 @@ const pageSize = 5;
 const currentPage = ref(1);
 const showGamesOnly = ref(false);
 
-// Filter for games only (adjust 'Game' to match your activity value for games)
+// Filter to display only games *might take out in the future, if a game summary page is added*
 const filteredActivity = computed(() => {
   if (showGamesOnly.value) {
     return props.recentActivity.filter(a => a.activity === 'Game Outcome');
@@ -72,6 +72,13 @@ const paginatedActivity = computed(() => {
   const start = (currentPage.value - 1) * pageSize;
   return sortedActivity.value.slice(start, start + pageSize);
 });
+
+function confirmDelete(activity) {
+  if (confirm(`Delete activity from ${activity.player}?`)) {
+    // Notify parent to refresh player list
+    emit("delete", activity);
+  }
+}
 
 function nextPage() {
   if (currentPage.value < totalPages.value) currentPage.value++;

@@ -6,7 +6,7 @@
           <el-input v-model="form.name" required />
         </el-form-item>
         <el-form-item label="Number">
-          <el-input v-model.number="form.number" type="number" min="0" required />
+          <el-input v-model.number="form.number" type="number" min="0" max="5" required />
         </el-form-item>
         <el-form-item label="Position">
           <el-input v-model="form.position" required />
@@ -34,6 +34,7 @@ const props = defineProps({
   player: Object,
   visible: Boolean,
 });
+// Notify parent to refresh player list
 const emit = defineEmits(['update:visible', 'player-updated']);
 
 const skillCategories = {
@@ -111,10 +112,11 @@ function handleClose() {
 }
 
 function submit() {
-  if (!form.name || !form.position || form.number === '') {
+  if (!form.name.trim() || !form.position.trim() || form.number === '') {
     ElMessage.error("Name, Number, and Position are required.");
     return;
   }
+  // Notify parent to refresh player list
   emit("player-updated", { ...form, _id: props.player._id });
   handleClose();
 }

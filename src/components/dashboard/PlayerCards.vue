@@ -52,6 +52,7 @@ defineProps({
 });
 const emit = defineEmits(["show-details", "player-archived", "player-updated"]);
 
+// Delete modal state
 const deleteDialogVisible = ref(false);
 const playerToDelete = ref(null);
 
@@ -59,21 +60,26 @@ const playerToDelete = ref(null);
 const editDialogVisible = ref(false);
 const playerToEdit = ref(null);
 
+// Open delete dialog
 function openDeleteDialog(player) {
   playerToDelete.value = player;
   deleteDialogVisible.value = true;
 }
 
+// Close delete dialog
 function handleDialogClose() {
   deleteDialogVisible.value = false;
   playerToDelete.value = null;
 }
 
+// Open edit dialog
 function openEditDialog(player) {
   playerToEdit.value = player;
   editDialogVisible.value = true;
 }
 
+// Confirm delete action
+// This function will archive the player and emit an event to refresh the player list
 async function confirmDelete() {
   if (!playerToDelete.value) return;
   try {
@@ -82,10 +88,7 @@ async function confirmDelete() {
     deleteDialogVisible.value = false;
     playerToDelete.value = null;
     // Notify parent to refresh player list
-    // (emit an event or call a prop function as needed)
-    // Example:
     emit('player-archived');
-    // window.location.reload(); // Or use a better state update if available
   } catch (err) {
     ElMessage.error('Failed to archive player.');
   }
@@ -95,8 +98,8 @@ async function handlePlayerUpdated(updatedPlayer) {
   try {
     await playerService.updatePlayer(updatedPlayer._id, updatedPlayer);
     ElMessage.success('Player updated!');
+    // Notify parent to refresh player list
     emit('player-updated', updatedPlayer);
-    // window.location.reload();
   } catch (err) {
     ElMessage.error('Failed to update player.');
   }

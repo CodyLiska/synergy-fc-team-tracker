@@ -45,3 +45,9 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
   - bar graph colors
 - [ ] to delete a row from RecentActivity, you have to click into it to display a modal, then click the delete button.
 - [ ] make the font in the Team Skills Overview chart look better.
+
+
+# IMEDIATE TODO
+- [ ] view details modal not showing data
+- [ ] view details modal, undo the changes that turned it into an edit modal. *that might fix ^^^ this above one too
+- [ ] in edit player modal the skill values need to be limited to 0-5

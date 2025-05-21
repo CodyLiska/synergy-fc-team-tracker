@@ -1,14 +1,33 @@
 <!-- EVENTUALLY MOVE TO src/components/player/PlayerDetail.vue -->
 
 <template>
-  <el-dialog :model-value="localVisible">
+  <el-dialog :model-value="localVisible" title="Edit Player" width="500px" @close="handleClose">
     <div class="player-basic">
-      <div class="player-name">{{ player.name }}</div>
+      <!-- <div class="player-name">{{ player.name }}</div>
       <div><strong>Number:</strong> {{ player.number }}</div>
-      <div><strong>Position:</strong> {{ player.position }}</div>
+      <div><strong>Position:</strong> {{ player.position }}</div> -->
+      <el-form :model="editablePlayer" label-width="140px">
+        <el-form-item label="Name">
+          <el-input v-model="editablePlayer.name" />
+        </el-form-item>
+        <el-form-item label="Number">
+          <el-input-number v-model="editablePlayer.number" :min="0" />
+        </el-form-item>
+        <el-form-item label="Position">
+          <el-input v-model="editablePlayer.position" />
+        </el-form-item>
+
+        <!-- Editable skill maps -->
+        <template v-for="(category, label) in skillLabels" :key="label">
+          <el-divider>{{ label }}</el-divider>
+          <el-form-item v-for="(value, skill) in editablePlayer[category]" :key="skill" :label="capitalize(skill)">
+            <el-input-number v-model.number="editablePlayer[category][skill]" :min="0" :max="10" />
+          </el-form-item>
+        </template>
+      </el-form>
     </div>
     <!-- <pre>{{ player }}</pre> -->
-    <div class="player-stats">
+    <!-- <div class="player-stats">
       <div v-for="category in skillCategories" :key="category.label" class="stat-category">
         <h4>{{ category.label }}</h4>
         <ul>
@@ -18,7 +37,11 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
+    <template #footer>
+      <el-button @click="cancelChanges">Cancel</el-button>
+      <el-button type="primary" @click="saveChanges">Save</el-button>
+    </template>
   </el-dialog>
 </template>
 
@@ -29,7 +52,6 @@ const props = defineProps({
   player: Object,
   visible: Boolean
 });
-const emit = defineEmits(['update:visible']);
 
 // Local state to control dialog visibility
 const localVisible = ref(props.visible);
@@ -51,11 +73,31 @@ watch(
   { immediate: true }
 );
 
-// Emit update when dialog is closed
-function handleClose() {
-  localVisible.value = false;
-  emit('update:visible', false);
+const emit = defineEmits(["update:visible", "player-updated"]);
+
+const skillLabels = {
+  psychological: "Psychological",
+  physical: "Physical",
+  socialEmotional: "Social/Emotional",
+  technical: "Technical",
 };
+
+const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+
+const saveChanges = () => {
+  emit("player-updated", editablePlayer.value);
+  emit("update:visible", false); // close dialog
+};
+
+const cancelChanges = () => {
+  emit("update:visible", false); // close dialog without emitting changes
+};
+
+// Emit update when dialog is closed
+// function handleClose() {
+//   localVisible.value = false;
+//   emit('update:visible', false);
+// };
 
 const skillCategories = [
   {

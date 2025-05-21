@@ -18,6 +18,8 @@ const playerSchema = new mongoose.Schema({
   psychological: {
     type: Map,
     of: Number,
+    min: 0,
+    max: 5,
     default: {
       selfConfidence: 0,
       competitiveness: 0,
@@ -30,6 +32,8 @@ const playerSchema = new mongoose.Schema({
   physical: {
     type: Map,
     of: Number,
+    min: 0,
+    max: 5,
     default: {
       agility: 0,
       balance: 0,
@@ -44,6 +48,8 @@ const playerSchema = new mongoose.Schema({
   socialEmotional: {
     type: Map,
     of: Number,
+    min: 0,
+    max: 5,
     default: {
       listening: 0,
       cooperation: 0,
@@ -59,6 +65,8 @@ const playerSchema = new mongoose.Schema({
   technical: {
     type: Map,
     of: Number,
+    min: 0,
+    max: 5,
     default: {
       dribbling: 0,
       shooting: 0,

@@ -3,9 +3,9 @@ const router = express.Router();
 const { body, param, validationResult } = require("express-validator");
 const Player = require("../../api/models/Player");
 const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
-const Game = require("../../api/models/Game");
+//const Game = require("../../api/models/Game");
 
-// Get all players
+// GET /api/players
 router.get("/", async (req, res) => {
   try {
     const players = await Player.find();
@@ -15,12 +15,12 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get single player
+// GET /api/players/:id
 router.get("/:id", [param("id").isMongoId()], getPlayer, (req, res) => {
   res.json(res.player);
 });
 
-// Create a player
+// POST /api/players
 router.post(
   "/",
   [
@@ -51,58 +51,55 @@ router.post(
     }
   }
 );
-// router.post("/", async (req, res) => {
-//   const player = new Player({
-//     name: req.body.name,
-//     number: req.body.number,
-//     position: req.body.position,
-//     psychological: req.body.psychological,
-//     physical: req.body.physical,
-//     socialEmotional: req.body.socialEmotional,
-//     technical: req.body.technical,
-//   });
 
-//   try {
-//     const newPlayer = await player.save();
-//     res.status(201).json(newPlayer);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
+// PATCH /api/players/:id
+router.patch(
+  "/:id",
+  [
+    param("id").isMongoId(),
+    body("name").optional().isString().trim().notEmpty(),
+    body("number").optional().isInt({ min: 0 }),
+    body("position").optional().isString().trim().notEmpty(),
+    body("psychological").optional().isObject(),
+    body("physical").optional().isObject(),
+    body("socialEmotional").optional().isObject(),
+    body("technical").optional().isObject(),
+  ],
+  getPlayer,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
 
-// Update a player
-router.patch("/:id", getPlayer, async (req, res) => {
-  if (req.body.name != null) {
-    res.player.name = req.body.name;
-  }
-  if (req.body.number != null) {
-    res.player.number = req.body.number;
-  }
-  if (req.body.position != null) {
-    res.player.position = req.body.position;
-  }
-  if (req.body.psychological != null) {
-    res.player.psychological = req.body.psychological;
-  }
-  if (req.body.physical != null) {
-    res.player.physical = req.body.physical;
-  }
-  if (req.body.socialEmotional != null) {
-    res.player.socialEmotional = req.body.socialEmotional;
-  }
-  if (req.body.technical != null) {
-    res.player.technical = req.body.technical;
-  }
+    const updateFields = [
+      "name",
+      "number",
+      "position",
+      "psychological",
+      "physical",
+      "socialEmotional",
+      "technical",
+    ];
 
-  try {
-    const updatedPlayer = await res.player.save();
-    res.json(updatedPlayer);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
+    updateFields.forEach((field) => {
+      if (req.body[field] != null) {
+        res.player[field] = req.body[field];
+      }
+    });
 
-// Archive a player (move to archive collection)
+    try {
+      const updatedPlayer = await res.player.save();
+      res.json(updatedPlayer);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
+);
+
+// POST /api/players/:id/archive
+// This endpoint archives a player by moving them to the ArchivedPlayer collection
+// and deleting them from the Player collection.
 router.post("/:id/archive", async (req, res) => {
   const player = await Player.findById(req.params.id);
   if (!player) return res.status(404).send("Player not found");

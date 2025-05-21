@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const rateLimit = require('express-rate-limit');
+const rateLimit = require("express-rate-limit");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const helmet = require("helmet");
@@ -14,33 +14,40 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Middleware
+// CORS middleware
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
-app.use(rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 60, // Limit each IP to 60 requests per minute
-}));
+// Rate limiting middleware
+app.use(
+  rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 60, // Limit each IP to 60 requests per minute
+  })
+);
 
 app.use(express.json());
 
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-    },
-  },
-}));
+// ** If needed **
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       defaultSrc: ["'self'"],
+//       styleSrc: ["'self'", 'https:'], // safer — allow external styles only
+//       scriptSrc: ["'self'"],
+//       imgSrc: ["'self'", 'data:'],
+//     },
+//   })
+// );
+
+// Use defaults — no inline styles allowed
+app.use(helmet());
 
 // Routes
 app.use("/api/players", playerRoutes);
