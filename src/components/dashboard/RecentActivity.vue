@@ -39,8 +39,10 @@
 </template>
 
 <script setup>
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, ref, computed, defineEmits } from 'vue';
 // import { recentActivityService } from '../../services/recentActivityService';
+
+const emit = defineEmits();
 
 const props = defineProps({
   recentActivity: {

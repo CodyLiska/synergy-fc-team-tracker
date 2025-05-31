@@ -39,6 +39,12 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 - SUMMARY PAGES
 - [ ] add a summary page to display all games played
 
+- TEAM STATS SECTION
+- [x] Games Played card not updating when a game is deleted from the Recent Activity table
+
+- VIEW DETAILS MODAL
+- [x] stats aren't displaying in the modal
+
 ## Down the road (NICE TO HAVE)
 - [ ] implement a better color scheme - TEMPORARY FOR NOW
   - the overall layout 

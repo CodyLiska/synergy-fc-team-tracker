@@ -15,7 +15,7 @@
         <template v-for="(skills, category) in skillCategories" :key="category">
           <el-divider>{{ category }}</el-divider>
           <el-form-item v-for="skill in skills" :key="skill" :label="skill.replace(/_/g, ' ')" class="skill-form-item">
-            <el-input v-model.number="form[categoryKey(category)][skill]" type="number" :min="0" :max="10" />
+            <el-input v-model.number="form[category][skill]" type="number" :min="0" :max="5" />
           </el-form-item>
         </template>
       </el-form>
@@ -101,6 +101,9 @@ watch(
       form.position = player.position;
       for (const cat of Object.keys(skillCategories)) {
         form[cat] = { ...player[cat] };
+        for (const skill of skillCategories[cat]) {
+          form[cat][skill] = player[cat]?.[skill] ?? 0;
+        }
       }
     }
   },

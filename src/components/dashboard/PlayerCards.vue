@@ -19,7 +19,7 @@
             <div>Technical: {{ getAverage(player.technical) }}</div>
           </div>
           <div class="card-actions">
-            <el-button class="details-btn" size="small" @click="$emit('show-details', player)">
+            <el-button class="details-btn" size="small" @click="openDetailsDialog(player)">
               View Details
             </el-button>
             <el-button class="delete-btn" size="small" type="danger"
@@ -37,6 +37,8 @@
     </el-dialog>
     <PlayerEdit v-if="playerToEdit" :player="playerToEdit" :visible="editDialogVisible"
       @update:visible="editDialogVisible = $event" @player-updated="handlePlayerUpdated" />
+    <PlayerDetail v-if="playerToView" :player="playerToView" :visible="detailsDialogVisible"
+      @update:visible="detailsDialogVisible = $event" />
   </div>
 </template>
 
@@ -45,6 +47,7 @@ import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { playerService } from '../../services/playerService';
 import PlayerEdit from '../player/PlayerEdit.vue';
+import PlayerDetail from '../dashboard/PlayerDetail.vue';
 
 defineProps({
   players: Array,
@@ -59,6 +62,10 @@ const playerToDelete = ref(null);
 // Edit modal state
 const editDialogVisible = ref(false);
 const playerToEdit = ref(null);
+
+// Details modal state
+const detailsDialogVisible = ref(false);
+const playerToView = ref(null);
 
 // Open delete dialog
 function openDeleteDialog(player) {
@@ -76,6 +83,12 @@ function handleDialogClose() {
 function openEditDialog(player) {
   playerToEdit.value = player;
   editDialogVisible.value = true;
+}
+
+// Open details dialog
+function openDetailsDialog(player) {
+  playerToView.value = player;
+  detailsDialogVisible.value = true;
 }
 
 // Confirm delete action

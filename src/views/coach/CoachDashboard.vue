@@ -320,6 +320,7 @@ const handleDeleteRecent = async (row) => {
       // Delete game
       await axios.delete(`${import.meta.env.VITE_API_URL}/games/${row._id}`);
       await fetchRecentGames();
+      await fetchTeamStats();
     } else {
       // Delete activity
       await recentActivityService.deleteActivity(row._id);
