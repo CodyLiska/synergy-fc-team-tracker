@@ -27,21 +27,23 @@
         </div>
 
 
-        <!-- Player Stats Section -->
+        <!-- Player Section -->
         <div class="section-card">
           <h2 class="section-heading"><el-icon>
               <User />
-            </el-icon> Player Stats</h2>
+            </el-icon> Players</h2>
           <div class="add-player-button">
             <el-button type="primary" @click="navigateToCreatePlayer"><el-icon>
                 <Plus />
               </el-icon> Add New Player</el-button>
           </div>
+          <el-skeleton v-if="isLoadingPlayers" animated :rows="3" />
+
           <PlayerCards :players="players" :getAverage="getAverage" @player-archived="handlePlayerDataChanged"
             @show-details="handleShowDetails" @player-updated="handlePlayerDataChanged" />
 
           <PlayerDetail v-if="selectedPlayer" :player="selectedPlayer" :visible="playerDialogVisible"
-            @update:visible="playerDialogVisible = $event" />
+            @update:visible="playerDialogVisible = $event" @player-updated="handlePlayerUpdated" />
         </div>
 
         <!-- Recent Activity Section -->
@@ -83,6 +85,7 @@ const playerDialogVisible = ref(false)
 const selectedPlayer = ref(null)
 const recentActivity = ref([]);
 const recentGames = ref([]);
+const isLoadingPlayers = ref(false);
 
 // --- TEAM STATS (from backend) ---
 const teamStats = ref({
@@ -122,16 +125,15 @@ const navigateToAddGameOutcome = () => {
   router.push('/add-game-outcome');
 };
 
-// Fetch team stats from backend
-const fetchTeamStats = async () => {
+// --- PLAYERS CARDS ---
+const fetchPlayers = async () => {
   try {
-    const stats = await teamStatsService.getTeamStats();
-    teamStats.value.totalPlayers = stats.totalPlayers;
-    teamStats.value.gamesPlayed = stats.gamesPlayed;
-    teamStats.value.winRate = stats.winRate;
-    // teamRating will be set after bar chart averages are calculated
-  } catch (err) {
-    console.error('Error fetching team stats:', err);
+    isLoadingPlayers.value = true;
+    players.value = await playerService.getAllPlayers();
+  } catch (error) {
+    ElMessage.error("Error fetching players.");
+  } finally {
+    isLoadingPlayers.value = false;
   }
 };
 
@@ -230,17 +232,16 @@ const fetchTeamSkillsData = async () => {
   }
 };
 
-const getAverage = (skills) => {
-  const values = Object.values(skills);
-  return (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
-};
-
-// --- PLAYERS CARDS ---
-const fetchPlayers = async () => {
+// Fetch team stats from backend
+const fetchTeamStats = async () => {
   try {
-    players.value = await playerService.getAllPlayers();
-  } catch (error) {
-    console.error('Error fetching players:', error);
+    const stats = await teamStatsService.getTeamStats();
+    teamStats.value.totalPlayers = stats.totalPlayers;
+    teamStats.value.gamesPlayed = stats.gamesPlayed;
+    teamStats.value.winRate = stats.winRate;
+    // teamRating will be set after bar chart averages are calculated
+  } catch (err) {
+    console.error('Error fetching team stats:', err);
   }
 };
 
@@ -248,6 +249,11 @@ const handlePlayerDataChanged = async () => {
   await fetchPlayers();
   await fetchTeamSkillsData();
   await fetchTeamStats();
+};
+
+const getAverage = (skills) => {
+  const values = Object.values(skills);
+  return (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
 };
 
 const handleShowDetails = (player) => {
@@ -314,6 +320,7 @@ const handleDeleteRecent = async (row) => {
       // Delete game
       await axios.delete(`${import.meta.env.VITE_API_URL}/games/${row._id}`);
       await fetchRecentGames();
+      await fetchTeamStats();
     } else {
       // Delete activity
       await recentActivityService.deleteActivity(row._id);

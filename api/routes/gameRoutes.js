@@ -4,13 +4,16 @@ const { body, query, param, validationResult } = require("express-validator");
 const Game = require("../../api/models/Game");
 const Player = require("../../api/models/Player");
 
+// POST /api/games
 router.post(
   "/",
   [
     // ** TODO: THIS CAUSES A BAD REQUEST ERROR **
     // body("opponent").isString().trim().notEmpty(),
     // body("date").isISO8601(),
-    // body("score").isString().notEmpty(),
+    // body("score.us").isInt({ min: 0 }),
+    // body("score.them").isInt({ min: 0 }),
+    // body("result").isIn(["win", "loss", "draw"])
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -35,7 +38,6 @@ router.get(
   [query("sort").isIn(["date", "-date"])],
   async (req, res) => {
     try {
-      // const limit = parseInt(req.query.limit) || 5;
       const limit = Math.min(parseInt(req.query.limit) || 5, 100); // cap at 100
       const sort = req.query.sort === "-date" ? { date: -1 } : { date: 1 };
       const games = await Game.find().sort(sort).limit(limit);
@@ -46,6 +48,7 @@ router.get(
   }
 );
 
+// DELETE /api/games/:id
 router.delete("/:id", [param("id").isMongoId()], async (req, res) => {
   try {
     await Game.findByIdAndDelete(req.params.id);

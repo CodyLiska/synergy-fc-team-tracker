@@ -32,10 +32,28 @@ const activity = ref({
   details: ''
 });
 
+// const handleAddActivity = async () => {
+//   const now = new Date();
+//   activity.value.date = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
+//   await recentActivityService.addActivity(activity.value);
+//   router.push('/coach');
+// };
 const handleAddActivity = async () => {
   const now = new Date();
-  activity.value.date = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
-  await recentActivityService.addActivity(activity.value);
+  const payload = {
+    ...activity.value,
+    date: now.toISOString(),
+    player: activity.value.player.trim(),
+    activity: activity.value.activity.trim(),
+    details: activity.value.details.trim(),
+  };
+
+  if (!payload.player || !payload.activity || !payload.details) {
+    alert("All fields are required.");
+    return;
+  }
+
+  await recentActivityService.addActivity(payload);
   router.push('/coach');
 };
 </script>

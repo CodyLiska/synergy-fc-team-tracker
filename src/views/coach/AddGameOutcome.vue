@@ -49,25 +49,49 @@ const form = ref({
   },
 });
 
-const submitForm = async () => {
-  try {
-    // Format date as ISO string for backend
-    const payload = {
-      ...form.value,
-      date: form.value.date ? new Date(form.value.date).toISOString() : '',
-      opponent: form.value.opponent.trim(),
-      result: form.value.result,
-    };
-    if (!payload.opponent || !payload.date || !payload.result) {
-      ElMessage.error("Please fill all required fields.");
-      return;
-    }
+// const submitForm = async () => {
+//   try {
+//     // Format date as ISO string for backend
+//     const payload = {
+//       ...form.value,
+//       date: form.value.date ? new Date(form.value.date).toISOString() : '',
+//       opponent: form.value.opponent.trim(),
+//       result: form.value.result,
+//     };
+//     if (!payload.opponent || !payload.date || !payload.result) {
+//       ElMessage.error("Please fill all required fields.");
+//       return;
+//     }
 
+//     await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
+//     ElMessage.success('Game outcome added!');
+//     router.push('/coach');
+//   } catch (err) {
+//     ElMessage.error('Failed to add game outcome.');
+//   }
+// };
+
+const submitForm = async () => {
+  const payload = {
+    ...form.value,
+    date: form.value.date ? new Date(form.value.date).toISOString() : '',
+    opponent: form.value.opponent.trim(),
+    result: form.value.result,
+  };
+
+  const { us, them } = form.value.score;
+
+  if (!payload.opponent || !payload.date || !payload.result || us < 0 || them < 0) {
+    ElMessage.error("All fields must be filled with valid values.");
+    return;
+  }
+
+  try {
     await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
-    ElMessage.success('Game outcome added!');
-    router.push('/coach');
+    ElMessage.success("Game outcome added!");
+    router.push("/coach");
   } catch (err) {
-    ElMessage.error('Failed to add game outcome.');
+    ElMessage.error("Failed to add game outcome.");
   }
 };
 </script>

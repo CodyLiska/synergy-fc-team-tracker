@@ -6,7 +6,7 @@
           <el-input v-model="form.name" required />
         </el-form-item>
         <el-form-item label="Number">
-          <el-input v-model.number="form.number" type="number" min="0" required />
+          <el-input v-model.number="form.number" type="number" min="0" max="5" required />
         </el-form-item>
         <el-form-item label="Position">
           <el-input v-model="form.position" required />
@@ -15,7 +15,7 @@
         <template v-for="(skills, category) in skillCategories" :key="category">
           <el-divider>{{ category }}</el-divider>
           <el-form-item v-for="skill in skills" :key="skill" :label="skill.replace(/_/g, ' ')" class="skill-form-item">
-            <el-input v-model.number="form[categoryKey(category)][skill]" type="number" :min="0" :max="10" />
+            <el-input v-model.number="form[category][skill]" type="number" :min="0" :max="5" />
           </el-form-item>
         </template>
       </el-form>
@@ -34,6 +34,7 @@ const props = defineProps({
   player: Object,
   visible: Boolean,
 });
+// Notify parent to refresh player list
 const emit = defineEmits(['update:visible', 'player-updated']);
 
 const skillCategories = {
@@ -100,6 +101,9 @@ watch(
       form.position = player.position;
       for (const cat of Object.keys(skillCategories)) {
         form[cat] = { ...player[cat] };
+        for (const skill of skillCategories[cat]) {
+          form[cat][skill] = player[cat]?.[skill] ?? 0;
+        }
       }
     }
   },
@@ -111,10 +115,11 @@ function handleClose() {
 }
 
 function submit() {
-  if (!form.name || !form.position || form.number === '') {
+  if (!form.name.trim() || !form.position.trim() || form.number === '') {
     ElMessage.error("Name, Number, and Position are required.");
     return;
   }
+  // Notify parent to refresh player list
   emit("player-updated", { ...form, _id: props.player._id });
   handleClose();
 }

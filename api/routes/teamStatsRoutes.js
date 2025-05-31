@@ -9,6 +9,7 @@ const statsLimiter = rateLimit({
   max: 10, // limit each IP to 10 requests per minute
 });
 
+// GET /api/team-stats
 router.get("/", statsLimiter, async (req, res) => {
   try {
     const totalPlayers = await Player.countDocuments();

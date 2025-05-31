@@ -23,7 +23,7 @@ router.post(
     // body("date").isISO8601(),
     // body("player").isString().trim().notEmpty(),
     // body("activity").isString().trim().notEmpty(),
-    // body("details").isString().trim().optional(),
+    // body("details").optional().isString().trim(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -31,22 +31,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { date, player, activity, details } = req.body;
-    try {
-      const newActivity = new RecentActivity({
-        date,
-        player,
-        activity,
-        details,
-      });
-      await newActivity.save();
-      res.status(201).json(newActivity);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+    const newActivity = new RecentActivity(req.body);
+    await newActivity.save();
+    res.status(201).json(newActivity);
   }
 );
 
+// DELETE /api/recent-activity/:id
 router.delete("/:id", [param("id").isMongoId()], async (req, res) => {
   try {
     await RecentActivity.findByIdAndDelete(req.params.id);

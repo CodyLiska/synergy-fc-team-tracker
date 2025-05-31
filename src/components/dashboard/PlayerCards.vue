@@ -19,7 +19,7 @@
             <div>Technical: {{ getAverage(player.technical) }}</div>
           </div>
           <div class="card-actions">
-            <el-button class="details-btn" size="small" @click="$emit('show-details', player)">
+            <el-button class="details-btn" size="small" @click="openDetailsDialog(player)">
               View Details
             </el-button>
             <el-button class="delete-btn" size="small" type="danger"
@@ -37,6 +37,8 @@
     </el-dialog>
     <PlayerEdit v-if="playerToEdit" :player="playerToEdit" :visible="editDialogVisible"
       @update:visible="editDialogVisible = $event" @player-updated="handlePlayerUpdated" />
+    <PlayerDetail v-if="playerToView" :player="playerToView" :visible="detailsDialogVisible"
+      @update:visible="detailsDialogVisible = $event" />
   </div>
 </template>
 
@@ -45,6 +47,7 @@ import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { playerService } from '../../services/playerService';
 import PlayerEdit from '../player/PlayerEdit.vue';
+import PlayerDetail from '../dashboard/PlayerDetail.vue';
 
 defineProps({
   players: Array,
@@ -52,6 +55,7 @@ defineProps({
 });
 const emit = defineEmits(["show-details", "player-archived", "player-updated"]);
 
+// Delete modal state
 const deleteDialogVisible = ref(false);
 const playerToDelete = ref(null);
 
@@ -59,21 +63,36 @@ const playerToDelete = ref(null);
 const editDialogVisible = ref(false);
 const playerToEdit = ref(null);
 
+// Details modal state
+const detailsDialogVisible = ref(false);
+const playerToView = ref(null);
+
+// Open delete dialog
 function openDeleteDialog(player) {
   playerToDelete.value = player;
   deleteDialogVisible.value = true;
 }
 
+// Close delete dialog
 function handleDialogClose() {
   deleteDialogVisible.value = false;
   playerToDelete.value = null;
 }
 
+// Open edit dialog
 function openEditDialog(player) {
   playerToEdit.value = player;
   editDialogVisible.value = true;
 }
 
+// Open details dialog
+function openDetailsDialog(player) {
+  playerToView.value = player;
+  detailsDialogVisible.value = true;
+}
+
+// Confirm delete action
+// This function will archive the player and emit an event to refresh the player list
 async function confirmDelete() {
   if (!playerToDelete.value) return;
   try {
@@ -82,10 +101,7 @@ async function confirmDelete() {
     deleteDialogVisible.value = false;
     playerToDelete.value = null;
     // Notify parent to refresh player list
-    // (emit an event or call a prop function as needed)
-    // Example:
     emit('player-archived');
-    // window.location.reload(); // Or use a better state update if available
   } catch (err) {
     ElMessage.error('Failed to archive player.');
   }
@@ -95,8 +111,8 @@ async function handlePlayerUpdated(updatedPlayer) {
   try {
     await playerService.updatePlayer(updatedPlayer._id, updatedPlayer);
     ElMessage.success('Player updated!');
+    // Notify parent to refresh player list
     emit('player-updated', updatedPlayer);
-    // window.location.reload();
   } catch (err) {
     ElMessage.error('Failed to update player.');
   }
