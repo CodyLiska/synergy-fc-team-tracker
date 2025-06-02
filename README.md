@@ -107,7 +107,7 @@ team-tracker-vue/
 - [ ] Improve activity/game integration with external sports apps
 - [ ] Add summary pages for games and player stats
 - [ ] Enhance color scheme and accessibility
-- [ ] Modal-based row deletion for recent activity
+- [x] Modal-based row deletion for recent activity
 
 ---
 
