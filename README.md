@@ -1,4 +1,4 @@
-# Team Tracker Vue
+# Soccer Team/Player Tracking Platform
 
 A modern, full-stack team management and player tracking application built with **Vue 3**, **Vite**, and a **Node.js/MongoDB** backend. Designed for coaches and team managers to easily track player stats, game outcomes, activities, and more in a clean, user-friendly interface.
 
