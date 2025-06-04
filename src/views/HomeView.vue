@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <h1 class="main-title">
-      <span class="gradient-text">Soccer Player Tracker</span>
+      <span class="gradient-text">Synergy FC Team Tracker</span>
     </h1>
     <p class="subtitle">
       Comprehensive player management and performance tracking platform
