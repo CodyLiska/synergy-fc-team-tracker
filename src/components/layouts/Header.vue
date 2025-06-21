@@ -5,63 +5,42 @@
       <el-menu-item v-for="item in navigationItems" :key="item.label" :index="item.path">
         <router-link :to="item.path">{{ item.label }}</router-link>
       </el-menu-item>
+      <el-menu-item v-if="coachName" disabled>
+        👤 {{ coachName }}
+      </el-menu-item>
     </el-menu>
-    <!-- <el-button class="theme-btn" @click="toggleTheme" circle>
-  <i v-if="isDark" class="fas fa-moon"></i>
-  <i v-else class="fas fa-sun"></i>
-</el-button> -->
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, watch, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { isAuthenticated, logout } from '@/services/authService'
 
 const navigationItems = [
   { label: 'Home', path: '/' },
   { label: 'Coach Dashboard', path: '/coach' },
 ]
 
+const coachName = ref('')
 const route = useRoute()
+const router = useRouter()
 const activeMenu = ref(route.path)
 
-// Watch for route changes and update activeMenu
-watch(
-  () => route.path,
-  (newPath) => {
-    activeMenu.value = newPath
-  }
-)
+watch(() => route.path, (newPath) => {
+  activeMenu.value = newPath
+})
 
-// const isDark = ref(false)
+onMounted(() => {
+  const name = localStorage.getItem('coachName')
+  if (name) coachName.value = name
+})
 
-// function toggleTheme() {
-//   isDark.value = !isDark.value
-//   if (isDark.value) {
-//     document.body.classList.add('dark-theme')
-//     document.documentElement.classList.add('dark-theme')
-//   } else {
-//     document.body.classList.remove('dark-theme')
-//     document.documentElement.classList.remove('dark-theme')
-//   }
-// }
+function handleLogout() {
+  logout()
+  router.push('/login')
+}
 
-// Optional: Persist theme across reloads
-// onMounted(() => {
-//   const dark = localStorage.getItem('theme') === 'dark'
-//   isDark.value = dark
-//   if (dark) {
-//     document.body.classList.add('dark-theme')
-//     document.documentElement.classList.add('dark-theme')
-//   } else {
-//     document.body.classList.remove('dark-theme')
-//     document.documentElement.classList.remove('dark-theme')
-//   }
-// })
-
-// watch(isDark, (val) => {
-//   localStorage.setItem('theme', val ? 'dark' : 'light')
-// })
 </script>
 
 <style scoped>
@@ -118,11 +97,4 @@ watch(
   color: var(--text-secondary) !important;
   background: var(--bg-secondary) !important;
 }
-
-/* .theme-btn {
-  margin-left: 16px;
-  background: var(--bg-secondary);
-  color: var(--text-main);
-  border: none;
-} */
 </style>

@@ -4,6 +4,12 @@ const { body, query, param, validationResult } = require("express-validator");
 const Game = require("../../api/models/Game");
 const Player = require("../../api/models/Player");
 
+const authenticateCoach = require("../middleware/authenticateCoach");
+const requireCoach = require("../middleware/requireCoach");
+
+router.use(authenticateCoach);
+router.use(requireCoach);
+
 // POST /api/games
 router.post(
   "/",

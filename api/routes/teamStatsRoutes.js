@@ -3,13 +3,16 @@ const router = express.Router();
 const rateLimit = require("express-rate-limit");
 const Player = require("../../api/models/Player");
 const Game = require("../../api/models/Game");
-const requireCoach = require("../middleware/requireCoach");
 
 const statsLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // limit each IP to 10 requests per minute
 });
 
+const authenticateCoach = require("../middleware/authenticateCoach");
+const requireCoach = require("../middleware/requireCoach");
+
+router.use(authenticateCoach);
 router.use(requireCoach);
 
 if (process.env.NODE_ENV === "production") {

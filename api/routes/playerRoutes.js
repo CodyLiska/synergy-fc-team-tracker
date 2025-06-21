@@ -4,9 +4,12 @@ const mongoose = require("mongoose");
 const { body, param, validationResult } = require("express-validator");
 const Player = require("../../api/models/Player");
 const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
+
+const authenticateCoach = require("../middleware/authenticateCoach");
 const requireCoach = require("../middleware/requireCoach");
 
-router.use(requireCoach); // Apply coach middleware
+router.use(authenticateCoach);
+router.use(requireCoach);
 
 // GET /api/players
 router.get("/", async (req, res) => {

@@ -54,6 +54,7 @@ app.use(express.json());
 app.use(helmet());
 
 // Routes
+app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/players", playerRoutes);
 app.use("/api/recent-activity", recentActivityRoutes);
 app.use("/api/team-stats", statsRoutes);

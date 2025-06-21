@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const { body, param, validationResult } = require("express-validator");
 const RecentActivity = require("../../api/models/RecentActivity");
+
+const authenticateCoach = require("../middleware/authenticateCoach");
 const requireCoach = require("../middleware/requireCoach");
 
+router.use(authenticateCoach);
 router.use(requireCoach);
 
 // GET /api/recent-activity

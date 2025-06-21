@@ -1,27 +1,23 @@
 import axios from "axios";
-import { getCoachId } from "./coachService";
+import { getToken, getCoachId } from "./authService";
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    const coachId = getCoachId();
-    if (coachId) {
-      // For Production
-      // config.headers["X-Coach-ID"] = coachId;
+axiosInstance.interceptors.request.use((config) => {
+  const token = getToken();
+  const coachId = getCoachId();
 
-      // For Development
-      config.headers["X-Coach-ID"] =
-        localStorage.getItem("coachId") || "665f1234567890abcdef1111";
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`;
   }
-);
+  if (coachId) {
+    config.headers["X-Coach-ID"] = coachId;
+  }
+
+  return config;
+});
 
 export default axiosInstance;

@@ -10,7 +10,7 @@ const coachSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    // passwordHash: { type: String, select: false }
+    passwordHash: { type: String, select: false },
   },
   { timestamps: true }
 );
