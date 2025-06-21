@@ -2,17 +2,18 @@ const TEAM_MAP = require("../config/teamMap");
 
 function requireCoach(req, res, next) {
   const coachId = req.header("X-Coach-ID");
-  const allowedIds = TEAM_MAP[coachId];
 
-  if (!Array.isArray(allowedIds) || allowedIds.length === 0) {
-    return res.status(403).json({ error: "No accessible coach IDs" });
+  if (!coachId) {
+    return res.status(401).json({ error: "Missing coach ID" });
   }
 
+  const allowedIds = TEAM_MAP[coachId];
   if (!allowedIds) {
     return res.status(403).json({ error: "Unauthorized coach" });
   }
 
-  req.coachIds = allowedIds[0];
+  req.coachId = coachId;
+  req.coachIds = allowedIds;
   next();
 }
 

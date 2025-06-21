@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import { mockCoaches, setCoachId, getCoachId } from "@/services/coachService";
+import { COACH_LIST, setCoachId, getCoachId } from "@/services/coachService";
 
 export default {
   name: "CoachSelector",
   data() {
     return {
-      coaches: mockCoaches,
+      coaches: COACH_LIST,
       selectedCoachId: getCoachId() || ""
     };
   },
