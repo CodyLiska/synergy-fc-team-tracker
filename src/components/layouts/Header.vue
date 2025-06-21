@@ -16,11 +16,16 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isAuthenticated, logout } from '@/services/authService'
+const coachRole = localStorage.getItem("coachRole")
 
 const navigationItems = [
   { label: 'Home', path: '/' },
   { label: 'Coach Dashboard', path: '/coach' },
 ]
+
+if (coachRole === 'admin') {
+  navigationItems.push({ label: 'Admin Panel', path: '/admin' })
+}
 
 const coachName = ref('')
 const route = useRoute()

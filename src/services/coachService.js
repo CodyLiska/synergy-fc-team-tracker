@@ -5,3 +5,7 @@ export function setCoachId(id) {
 export function getCoachId() {
   return localStorage.getItem("coachId");
 }
+
+export function getCoachRole() {
+  return localStorage.getItem("coachRole");
+}

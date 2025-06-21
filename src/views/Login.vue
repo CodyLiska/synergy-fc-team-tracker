@@ -31,8 +31,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from '@/services/axiosInstance'
 import { useRouter } from 'vue-router'
+import axios from '@/services/axiosInstance'
+import { setAccessToken } from '@/services/authService'
 
 const router = useRouter()
 const form = ref({ email: '', password: '' })
@@ -40,20 +41,16 @@ const rememberMe = ref(false)
 
 const handleLogin = async () => {
   try {
-    const { data } = await axios.post('/auth/login', form.value);
-    
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('coachId', data.coachId)
-    localStorage.setItem('coachName', data.name || form.value.email)
-    if (rememberMe.value) localStorage.setItem('rememberMe', 'true')
-    else localStorage.removeItem('rememberMe')
-    router.push('/coach')
-  } catch (error) {
-    alert('Invalid login. Please try again.')
-    console.error(error)
+    const { data } = await axios.post("/auth/login", form.value);
+    setAccessToken(data.accessToken);
+    localStorage.setItem("coachId", data.coachId);
+    localStorage.setItem("coachName", data.name || form.value.email);
+    localStorage.setItem("coachRole", data.role);
+    router.push("/coach");
+  } catch (err) {
+    alert("Invalid login");
   }
-}
-
+};
 </script>
 
 <style scoped></style>

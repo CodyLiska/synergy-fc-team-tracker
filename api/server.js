@@ -14,6 +14,7 @@ const envFile = `.env.${process.env.NODE_ENV || "local"}`;
 require("dotenv").config({ path: path.resolve(__dirname, envFile) });
 
 const app = express();
+const cookieParser = require("cookie-parser");
 
 // Connect to MongoDB
 connectDB();
@@ -37,7 +38,6 @@ app.use(
 );
 
 app.use(express.json());
-
 // ** If needed **
 // app.use(
 //   helmet.contentSecurityPolicy({
@@ -49,6 +49,8 @@ app.use(express.json());
 //     },
 //   })
 // );
+
+app.use(cookieParser());
 
 // Use defaults — no inline styles allowed
 app.use(helmet());
