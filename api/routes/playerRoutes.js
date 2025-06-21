@@ -11,7 +11,7 @@ router.use(requireCoach); // Apply coach middleware
 // GET /api/players
 router.get("/", async (req, res) => {
   try {
-    const players = await Player.find({ coachId: { $in: req.coachId } });
+    const players = await Player.find({ coachId: { $in: req.coachIds } });
     res.json(players);
   } catch (error) {
     res.status(500).json({ message: error.message });

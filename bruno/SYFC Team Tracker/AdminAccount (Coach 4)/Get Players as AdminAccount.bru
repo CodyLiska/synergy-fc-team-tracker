@@ -1,0 +1,15 @@
+meta {
+  name: Get Players as AdminAccount
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BASE_URL}}/players
+  body: none
+  auth: none
+}
+
+headers {
+  X-Coach-ID: {{COACH4_ID}}
+}

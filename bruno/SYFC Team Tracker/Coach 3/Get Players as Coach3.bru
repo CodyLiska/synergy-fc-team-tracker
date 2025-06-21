@@ -1,0 +1,15 @@
+meta {
+  name: Get Players as Coach3
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BASE_URL}}/players
+  body: none
+  auth: none
+}
+
+headers {
+  X-Coach-ID: {{COACH3_ID}}
+}

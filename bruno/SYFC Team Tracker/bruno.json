@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "SYFC Team Tracker",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

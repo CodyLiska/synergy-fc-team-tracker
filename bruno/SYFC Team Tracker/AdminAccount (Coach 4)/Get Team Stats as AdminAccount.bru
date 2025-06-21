@@ -1,0 +1,15 @@
+meta {
+  name: Get Team Stats as AdminAccount
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE_URL}}/team-stats
+  body: none
+  auth: none
+}
+
+headers {
+  X-Coach-ID: {{COACH4_ID}}
+}

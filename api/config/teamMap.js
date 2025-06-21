@@ -1,8 +1,24 @@
 const TEAM_MAP = {
-  coach1: ["coach1", "coach2", "coach3"], // head coach
-  coach2: ["coach2"],
-  coach3: ["coach3"],
-  coachAdmin: ["coachAdmin","coach1", "coach2", "coach3"],
+  "665f1234567890abcdef1111": [
+    // coach1
+    "665f1234567890abcdef1111",
+    "665f1234567890abcdef2222",
+    "665f1234567890abcdef3333",
+  ],
+  "665f1234567890abcdef2222": [
+    // coach2
+    "665f1234567890abcdef2222",
+  ],
+  "665f1234567890abcdef3333": [
+    // coach3
+    "665f1234567890abcdef3333",
+  ],
+  "665f1234567890abcdef9999": [
+    // adminAccount
+    "665f1234567890abcdef1111",
+    "665f1234567890abcdef2222",
+    "665f1234567890abcdef3333",
+    "665f1234567890abcdef9999",
+  ],
 };
-
 module.exports = TEAM_MAP;
