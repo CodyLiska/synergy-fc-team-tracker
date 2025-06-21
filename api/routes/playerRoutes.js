@@ -3,12 +3,14 @@ const router = express.Router();
 const { body, param, validationResult } = require("express-validator");
 const Player = require("../../api/models/Player");
 const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
-//const Game = require("../../api/models/Game");
+const requireCoach = require("../middleware/requireCoach");
+
+router.use(requireCoach); // Apply coach middleware
 
 // GET /api/players
 router.get("/", async (req, res) => {
   try {
-    const players = await Player.find();
+    const players = await Player.find({ coachId: req.coachId });
     res.json(players);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -40,6 +42,7 @@ router.post(
       name: req.body.name,
       number: req.body.number,
       position: req.body.position,
+      coachId: req.coachId,
     });
     console.log("Player object created:", player);
     try {

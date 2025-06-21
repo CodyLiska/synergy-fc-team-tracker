@@ -1,6 +1,6 @@
-import axios from './axiosInstance';
+import axios from "./axiosInstance";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/players`;
+const API_URL = `${import.meta.env.VITE_API_URL}/players}`;
 
 export const playerService = {
   getAllPlayers: async () => {
@@ -40,8 +40,7 @@ export const playerService = {
     }
   },
 
-  archivePlayer:async (playerId) => {
+  archivePlayer: async (playerId) => {
     await axios.post(`${API_URL}/${playerId}/archive`);
   },
-  
 };

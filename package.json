@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "NODE_ENV=production node server.js",
+    "start:local": "NODE_ENV=local node server.js"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

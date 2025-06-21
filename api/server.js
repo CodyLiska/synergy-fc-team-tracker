@@ -9,6 +9,10 @@ const gameRoutes = require("./routes/gameRoutes");
 const statsRoutes = require("./routes/teamStatsRoutes");
 const recentActivityRoutes = require("./routes/recentActivityRoutes");
 
+const path = require("path");
+const envFile = `.env.${process.env.NODE_ENV || "local"}`;
+require("dotenv").config({ path: path.resolve(__dirname, envFile) });
+
 const app = express();
 
 // Connect to MongoDB
@@ -17,9 +21,9 @@ connectDB();
 // CORS middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN,
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Coach-ID"],
     credentials: true,
   })
 );

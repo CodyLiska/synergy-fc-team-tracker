@@ -4,6 +4,7 @@
       <el-header height="60px">
         <Header />
       </el-header>
+      <CoachSelector />
       <el-main>
         <div class="main-content-wrapper">
           <slot /> <!-- Page-specific content injected here -->
@@ -18,6 +19,7 @@
 
 <script setup>
 import Header from './Header.vue'
+import CoachSelector from '../CoachSelector.vue' 
 import Footer from './Footer.vue'
 </script>
 

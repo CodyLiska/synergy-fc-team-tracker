@@ -3,15 +3,20 @@ const router = express.Router();
 const rateLimit = require("express-rate-limit");
 const Player = require("../../api/models/Player");
 const Game = require("../../api/models/Game");
+const requireCoach = require("../middleware/requireCoach");
 
 const statsLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // limit each IP to 10 requests per minute
 });
 
+router.use(requireCoach);
+
 // GET /api/team-stats
 router.get("/", statsLimiter, async (req, res) => {
   try {
+    const coachId = req.coachId;
+
     const totalPlayers = await Player.countDocuments();
     const gamesPlayed = await Game.countDocuments();
     const wins = await Game.countDocuments({ result: "win" });
@@ -19,7 +24,7 @@ router.get("/", statsLimiter, async (req, res) => {
       gamesPlayed > 0 ? ((wins / gamesPlayed) * 100).toFixed(1) + "%" : "0%";
 
     // Rating calculation: average of all player technical scores
-    const players = await Player.find();
+    const players = await Player.find({ coachId });
     let teamRating = 0;
     let playerCount = players.length;
     if (playerCount > 0) {

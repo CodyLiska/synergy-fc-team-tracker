@@ -15,6 +15,11 @@ const playerSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  coachId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Coach",
+    required: true,
+  },
   psychological: {
     type: Map,
     of: Number,
