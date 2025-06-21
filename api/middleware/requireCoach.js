@@ -1,12 +1,18 @@
+const TEAM_MAP = require("../config/teamMap");
+
 function requireCoach(req, res, next) {
   const coachId = req.header("X-Coach-ID");
+  const allowedIds = TEAM_MAP[coachId];
 
-  if (!coachId) {
-    return res.status(401).json({ error: "Missing X-Coach-ID header" });
+  if (!Array.isArray(allowedIds) || allowedIds.length === 0) {
+    return res.status(403).json({ error: "No accessible coach IDs" });
   }
 
-  // Optional: Validate format if needed (e.g., UUID or Mongo ObjectId)
-  req.coachId = coachId;
+  if (!allowedIds) {
+    return res.status(403).json({ error: "Unauthorized coach" });
+  }
+
+  req.coachIds = allowedIds[0];
   next();
 }
 

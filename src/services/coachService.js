@@ -1,7 +1,8 @@
 export const mockCoaches = [
-  { name: "Coach A", id: "coach1" },
-  { name: "Coach B", id: "coach2" },
-  { name: "Coach C", id: "coach3" },
+  { name: "coach1", id: "665f1234567890abcdef1111" },
+  { name: "coach2", id: "665f1234567890abcdef2222" },
+  { name: "coach3", id: "665f1234567890abcdef3333" },
+  { name: "coachAdmin", id: "665f1234567890abcdef9999" },
 ];
 
 export function setCoachId(id) {

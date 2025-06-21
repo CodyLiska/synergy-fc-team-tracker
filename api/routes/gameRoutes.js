@@ -22,7 +22,10 @@ router.post(
     }
 
     try {
-      const game = new Game(req.body);
+      const game = new Game({
+        ...req.body,
+        coachId: req.coachId,
+      });
       await game.save();
       res.status(201).json(game);
     } catch (err) {
@@ -40,7 +43,9 @@ router.get(
     try {
       const limit = Math.min(parseInt(req.query.limit) || 5, 100); // cap at 100
       const sort = req.query.sort === "-date" ? { date: -1 } : { date: 1 };
-      const games = await Game.find().sort(sort).limit(limit);
+      const games = await Game.find({ coachId: { $in: req.coachId } })
+        .sort(sort)
+        .limit(limit);
       res.json(games);
     } catch (err) {
       res.status(500).json({ error: "Failed to fetch games" });

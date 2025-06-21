@@ -26,6 +26,12 @@
           </div>
         </div>
 
+        <div class="player-summary" style="margin-bottom: 12px;">
+          <div v-for="(count, coachLabel) in playerBreakdown" :key="coachLabel">
+            <strong>Players ({{ coachLabel }}):</strong> {{ count }}
+          </div>
+          <strong>Total Players:</strong> {{ totalPlayersGrouped }}
+        </div>
 
         <!-- Player Section -->
         <div class="section-card">
@@ -86,6 +92,23 @@ const selectedPlayer = ref(null)
 const recentActivity = ref([]);
 const recentGames = ref([]);
 const isLoadingPlayers = ref(false);
+
+const playerBreakdown = ref({});
+const totalPlayersGrouped = ref(0);
+
+const fetchPlayerBreakdown = async () => {
+  try {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/team-stats/players-by-coach`, {
+      headers: {
+        'X-Coach-ID': localStorage.getItem('coachId') || 'coach1',
+      },
+    });
+    playerBreakdown.value = res.data.grouped;
+    totalPlayersGrouped.value = res.data.total;
+  } catch (error) {
+    console.error("Error fetching grouped player stats", error);
+  }
+};
 
 // --- TEAM STATS (from backend) ---
 const teamStats = ref({
@@ -333,6 +356,7 @@ const handleDeleteRecent = async (row) => {
 
 // Call this function when the component is mounted
 onMounted(() => {
+  fetchPlayerBreakdown();
   fetchPlayers();
   fetchTeamStats();
   fetchTeamSkillsData();
