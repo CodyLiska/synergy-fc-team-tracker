@@ -1,40 +1,29 @@
-# Soccer Team/Player Tracking Platform
+# Team Tracker
 
-A modern, full-stack team management and player tracking application built with **Vue 3**, **Vite**, and a **Node.js/MongoDB** backend. Designed for coaches and team managers to easily track player stats, game outcomes, activities, and more in a clean, user-friendly interface.
+Team Tracker is a full-stack web application designed to manage teams, players, and activities.  
+It combines a modern frontend with a Node.js backend and MongoDB integration.
 
 ---
 
 ## Features
 
-- **Coach Dashboard**
-  - View team stats (total players, games played, win rate, team rating)
-  - Visualize team skill averages in a bar chart
-  - See recent activities and game outcomes in a unified activity feed
-  - Add, edit, and delete players with full skill hierarchy
-  - Add and manage game outcomes
-  - Quick access to add new activities or players
-
-- **Player Management**
-  - Create, update, and archive players
-  - Track detailed skill hierarchies (psychological, physical, social/emotional, technical)
-  - View player details in a modal with full stats
-
-- **Game & Activity Tracking**
-  - Log game outcomes with opponent, score, and result
-  - Track recent activities and game results in a sortable table
-  - Delete activities or games directly from the dashboard
-
-- **Modern UI**
-  - Clean, responsive design with a pleasant, accessible color palette
-  - Built with Vue 3 `<script setup>` SFCs and Element Plus UI library
+- Manage teams, players, and games
+- Track recent activity and player history
+- Backend API for CRUD operations
+- Responsive frontend built with Vite
+- Secure environment-based configuration
+- Deployable on Vercel or container platforms
 
 ---
 
 ## Tech Stack
 
-- **Frontend:** Vue 3, Vite, Element Plus, Axios
-- **Backend:** Node.js, Express, MongoDB (Mongoose)
-- **Other:** ESLint, Prettier, modern CSS
+| Layer      | Technology                |
+| ---------- | ------------------------- |
+| Frontend   | Vite, JavaScript          |
+| Backend    | Node.js, Express          |
+| Database   | MongoDB                   |
+| Deployment | Vercel, Docker (optional) |
 
 ---
 
@@ -42,62 +31,67 @@ A modern, full-stack team management and player tracking application built with 
 
 ### Prerequisites
 
-- Node.js (v16+ recommended)
-- MongoDB
+- Node.js 18+
+- npm or yarn
+- MongoDB instance (local or cloud)
 
-### Installation
+### Setup
 
-1. **Clone the repository:**
+1. Clone the repository:
+
    ```bash
-   git clone https://github.com/your-username/team-tracker-vue.git
-   cd team-tracker-vue
+   git clone https://github.com/CodyLiska/team-tracker.git
+   cd team-tracker
    ```
 
-2. **Install frontend dependencies:**
+2. Install dependencies for frontend and backend:
+
    ```bash
-   cd team-tracker-vue
    npm install
+   cd api && npm install
    ```
 
-3. **Install backend dependencies:**
+3. Configure environment variables:  
+   Copy `.env.example` to `.env` (both at root and in `api/`) and fill in required values (database URI, API keys, etc).
+
+4. Start the backend server:
+
    ```bash
    cd api
-   npm install
+   npm run dev
    ```
 
-4. **Configure environment variables:**
-   - Copy `.env.example` to `.env` in the backend folder and set your MongoDB URI and any other secrets.
-
-5. **Start the backend server:**
-   ```bash
-   npm start
-   ```
-   The backend will run on `http://localhost:5000`.
-
-6. **Start the frontend dev server:**
+5. Start the frontend:
    ```bash
    npm run dev
    ```
-   The frontend will run on `http://localhost:5173`.
+
+Visit [http://localhost:5173](http://localhost:5173) or whichever port Vite outputs.
 
 ---
 
-## Project Structure
+## Development Guide
 
-```
-team-tracker-vue/
-├── src/                  # Vue frontend source code
-│   ├── components/
-│   ├── views/
-│   ├── services/
-│   └── style.css
-├── end/                  # Node.js backend source code
-│   ├── models/
-│   ├── routes/
-│   └── server.js
-├── package.json
-└── README.md
-```
+### API Overview
+
+- `api/server.js` is the entry point for backend logic.
+- Config files are in `api/config/` (DB connection, allowed emails).
+- Data models (MongoDB/Mongoose) are in `api/models/`:
+  - `Player.js`
+  - `Game.js`
+  - `ArchivedPlayer.js`
+  - `RecentActivity.js`
+
+### Common Tasks
+
+- **Database migrations**: Add/update schemas in `/models` and restart server.
+- **Environment configs**: Use `.env.local` for local dev, `.env.production` for deployment.
+- **Vercel deployment**: Ensure `vercel.json` is present with routes configured.
+
+### Troubleshooting
+
+- If frontend cannot connect to backend, check CORS in `api/server.js`.
+- Ensure MongoDB connection string is valid and matches environment config.
 
 ---
 
@@ -107,19 +101,54 @@ team-tracker-vue/
 - [ ] Improve activity/game integration with external sports apps
 - [ ] Add summary pages for games and player stats
 - [ ] Enhance color scheme and accessibility
-- [x] Modal-based row deletion for recent activity
+
+### IMEDIATE TODO
+
+- [ ] email based authentication for coaches dashboard
+- [ ] email based authentication for parents dashboard
+
+### PLAYER MODEL
+
+- [ ] add robustness to the model
+- [ ] parents name
+- [ ] parents contact info (phone, email, etc)
+
+### ACTIVITY TABLE
+
+- [ ] possible have it update with data from sport easy app
+
+### SUMMARY PAGES
+
+- [ ] add a summary page to display all games played
+
+### Down the road (NICE TO HAVE)
+
+- [ ] implement a better color scheme - TEMPORARY FOR NOW
+  - the overall layout
+  - bar graph colors
+- [ ] to delete a row from RecentActivity, you have to click into it to display a modal, then click the delete button.
+- [ ] make the font in the Team Skills Overview chart look better.
+- [ ] implement a dark mode
 
 ---
 
-## Contributing
+## Deployment
 
-Contributions are welcome! Please open an issue or submit a pull request.
+### Vercel
 
----
+- Deploy frontend directly (Vite)
+- Backend served via `api/` as serverless functions
 
-## License
+### Docker (optional)
 
-This project is licensed under the Apache-2.0 license.
+1. Build container:
+   ```bash
+   docker build -t team-tracker .
+   ```
+2. Run:
+   ```bash
+   docker run -p 3000:3000 team-tracker
+   ```
 
 ---
 
