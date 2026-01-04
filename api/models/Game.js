@@ -8,11 +8,11 @@ const gameSchema = new mongoose.Schema({
     us: { type: Number, required: true },
     them: { type: Number, required: true },
   },
-  coachId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Coach",
-    required: true,
-  },
+  // coachId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Coach",
+  //   required: true,
+  // },
 });
 
 module.exports = mongoose.model("Game", gameSchema);

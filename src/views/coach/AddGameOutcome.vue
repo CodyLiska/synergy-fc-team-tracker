@@ -87,7 +87,8 @@ const submitForm = async () => {
   }
 
   try {
-    await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
+    // await axios.post(`${import.meta.env.VITE_API_URL}/games`, payload);
+    await axios.post(`http://localhost:3000/api/games`, payload);
     ElMessage.success("Game outcome added!");
     router.push("/coach");
   } catch (err) {

@@ -17,9 +17,6 @@
             <el-checkbox v-model="rememberMe" />
             <span>Remember Me</span>
           </label>
-          <!-- <router-link to="/" class="text-sm text-blue-600 hover:underline">
-            Back to Home
-          </router-link> -->
         </div>
 
         <el-button type="primary" class="w-full" @click="handleLogin">Login</el-button>
@@ -28,24 +25,29 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import axios from '@/services/axiosInstance'
-import { setAccessToken } from '@/services/authService'
+// import axios from '@/services/axiosInstance'
+// import { setAccessToken } from '@/services/authService'
 
 const router = useRouter()
 const form = ref({ email: '', password: '' })
 const rememberMe = ref(false)
 
 const handleLogin = async () => {
+  console.log("INSIDE handleLogin", form.value);
   try {
-    const { data } = await axios.post("/auth/login", form.value);
-    setAccessToken(data.accessToken);
-    localStorage.setItem("coachId", data.coachId);
-    localStorage.setItem("coachName", data.name || form.value.email);
-    localStorage.setItem("coachRole", data.role);
+    // const { data } = await axios.post("/auth/login", form.value);
+
+    // Store token in memory
+    // setAccessToken(data.accessToken);
+
+    // Sync to localStorage for refresh persistence
+    // localStorage.setItem("coachId", data.coachId);
+    // localStorage.setItem("coachName", data.name || form.value.email);
+    // localStorage.setItem("coachRole", data.role);
+
     router.push("/coach");
   } catch (err) {
     alert("Invalid login");

@@ -1,6 +1,7 @@
 import axios from "./axiosInstance";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/players`;
+// const API_URL = `${import.meta.env.VITE_API_URL}/players`;
+const API_URL = `http://localhost:3000/api/players`;
 
 export const playerService = {
   getAllPlayers: async () => {

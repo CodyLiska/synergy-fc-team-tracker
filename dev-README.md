@@ -36,7 +36,7 @@
 # VIEW DETAILS MODAL
 - [x] stats aren't displaying in the modal
 
-# IMEDIATE TODO
+# IMMEDIATE TODO
 - [x] view details modal not showing data
 - [x] view details modal, undo the changes that turned it into an edit modal. *that might fix ^^^ this above one too
 - [x] in edit player modal the skill values need to be limited to 0-5

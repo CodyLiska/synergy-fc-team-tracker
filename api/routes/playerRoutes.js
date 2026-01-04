@@ -1,20 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
 const { body, param, validationResult } = require("express-validator");
 const Player = require("../../api/models/Player");
 const ArchivedPlayer = require("../../api/models/ArchivedPlayer");
 
-const authenticateCoach = require("../middleware/authenticateCoach");
+// const authenticateCoach = require("../middleware/authenticateCoach");
 const requireCoach = require("../middleware/requireCoach");
 
-router.use(authenticateCoach);
+// router.use(authenticateCoach);
 router.use(requireCoach);
 
 // GET /api/players
 router.get("/", async (req, res) => {
   try {
-    const players = await Player.find({ coachId: { $in: req.coachIds } });
+    const players = await Player.find({ coachId: req.coachId });
     res.json(players);
   } catch (error) {
     res.status(500).json({ message: error.message });

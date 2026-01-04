@@ -9,13 +9,17 @@
         👤 {{ coachName }}
       </el-menu-item>
     </el-menu>
+    <!-- <el-menu-item v-if="coachName" @click="handleLogout">
+      🚪 Logout
+    </el-menu-item> -->
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { isAuthenticated, logout } from '@/services/authService'
+// import { isAuthenticated, logout } from '@/services/authService'
+// import { logout } from '@/services/authService'
 const coachRole = localStorage.getItem("coachRole")
 
 const navigationItems = [
@@ -42,7 +46,7 @@ onMounted(() => {
 })
 
 function handleLogout() {
-  logout()
+  // logout()
   router.push('/login')
 }
 

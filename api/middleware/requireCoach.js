@@ -20,8 +20,8 @@
 // module.exports = requireCoach;
 
 const jwt = require("jsonwebtoken");
-const Coach = require("../models/Coach");
-const TEAM_MAP = require("../config/teamMap");
+// const Coach = require("../models/Coach");
+// const TEAM_MAP = require("../config/teamMap");
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
 
 const requireCoach = async (req, res, next) => {
@@ -34,20 +34,20 @@ const requireCoach = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const coach = await Coach.findById(decoded.id);
-    if (!coach) return res.status(401).json({ message: "Coach not found" });
+    // const coach = await Coach.findById(decoded.id);
+    // if (!coach) return res.status(401).json({ message: "Coach not found" });
 
-    req.coach = coach;
-    req.coachId = coach._id.toString();
+    // req.coach = coach;
+    // req.coachId = coach._id.toString();
 
-    // Role-based logic: admin and coach1 can access everyone
-    if (coach.role === "admin") {
-      req.coachIds = TEAM_MAP["665f1234567890abcdef9999"];
-    } else if (coach._id.toString() === "665f1234567890abcdef1111") {
-      req.coachIds = TEAM_MAP["665f1234567890abcdef1111"];
-    } else {
-      req.coachIds = [req.coachId];
-    }
+    // // Role-based logic: admin and coach1 can access everyone
+    // if (coach.role === "admin") {
+    //   req.coachIds = TEAM_MAP["665f1234567890abcdef9999"];
+    // } else if (coach._id.toString() === "665f1234567890abcdef1111") {
+    //   req.coachIds = TEAM_MAP["665f1234567890abcdef1111"];
+    // } else {
+    //   req.coachIds = [req.coachId];
+    // }
 
     next();
   } catch (err) {

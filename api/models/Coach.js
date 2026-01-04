@@ -14,7 +14,7 @@ const coachSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     role: {
       type: String,
-      enum: ["headCoach", "coachATeam", "coachBTeam", "admin"],
+      // enum: ["headCoach", "coachATeam", "coachBTeam", "admin"],
       required: true,
     },
   },

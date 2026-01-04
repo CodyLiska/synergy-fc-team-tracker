@@ -6,7 +6,7 @@ import CoachDashboard from "../views/coach/CoachDashboard.vue";
 // import CreatePlayer from "../views/coach/CreatePlayer.vue";
 // import AddActivity from "../views/coach/AddActivity.vue";
 import Login from "@/views/Login.vue";
-import { isAuthenticated } from "@/services/authService";
+// import { isAuthenticated } from "@/services/authService";
 
 // Commented out below after adding login functionality
 // const routes = [
@@ -40,7 +40,7 @@ import { isAuthenticated } from "@/services/authService";
 const routes = [
   {
     path: "/",
-    redirect: () => (isAuthenticated() ? "/coach" : "/login"),
+    redirect: () => "/login",
   },
   {
     path: "/login",
@@ -49,12 +49,12 @@ const routes = [
   {
     path: "/coach",
     component: CoachDashboard,
-    meta: { requiresAuth: true },
+    // meta: { requiresAuth: true },
   },
   {
     path: "/home",
     component: HomeView,
-    meta: { requiresAuth: true },
+    // meta: { requiresAuth: true },
   },
 ];
 
@@ -64,7 +64,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated()) {
+  if (to.meta.requiresAuth) {
     next("/login");
   } else {
     next();

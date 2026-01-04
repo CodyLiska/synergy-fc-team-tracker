@@ -26,12 +26,12 @@
           </div>
         </div>
 
-        <div class="player-summary" style="margin-bottom: 12px;">
+        <!-- <div class="player-summary" style="margin-bottom: 12px;">
           <div v-for="(count, coachLabel) in playerBreakdown" :key="coachLabel">
             <strong>Players ({{ coachLabel }}):</strong> {{ count }}
           </div>
           <strong>Total Players:</strong> {{ totalPlayersGrouped }}
-        </div>
+        </div> -->
 
         <!-- Player Section -->
         <div class="section-card">
@@ -93,22 +93,23 @@ const recentActivity = ref([]);
 const recentGames = ref([]);
 const isLoadingPlayers = ref(false);
 
-const playerBreakdown = ref({});
-const totalPlayersGrouped = ref(0);
+// const playerBreakdown = ref({});
+// const totalPlayersGrouped = ref(0);
 
-const fetchPlayerBreakdown = async () => {
-  try {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/team-stats/players-by-coach`, {
-      headers: {
-        'X-Coach-ID': localStorage.getItem('coachId') || 'coach1',
-      },
-    });
-    playerBreakdown.value = res.data.grouped;
-    totalPlayersGrouped.value = res.data.total;
-  } catch (error) {
-    console.error("Error fetching grouped player stats", error);
-  }
-};
+// const fetchPlayerBreakdown = async () => {
+//   try {
+//     // const res = await axios.get(`${import.meta.env.VITE_API_URL}/team-stats/players-by-coach`, {
+//     const res = await axios.get(`http://localhost:3000/api/team-stats/players-by-coach`, {
+//       headers: {
+//         'X-Coach-ID': localStorage.getItem('coachId') || 'coach1',
+//       },
+//     });
+//     playerBreakdown.value = res.data.grouped;
+//     totalPlayersGrouped.value = res.data.total;
+//   } catch (error) {
+//     console.error("Error fetching grouped player stats", error);
+//   }
+// };
 
 // --- TEAM STATS (from backend) ---
 const teamStats = ref({
@@ -300,7 +301,8 @@ const goToAddActivity = () => {
 const fetchRecentGames = async () => {
   try {
     // Fetch the most recent games, e.g., last 5
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/games?limit=5&sort=-date`);
+    // const response = await axios.get(`${import.meta.env.VITE_API_URL}/games?limit=5&sort=-date`);
+    const response = await axios.get(`http://localhost:3000/api/games?limit=5&sort=-date`);
     recentGames.value = response.data;
   } catch (error) {
     console.error('Error fetching recent games:', error);
@@ -341,7 +343,8 @@ const handleDeleteRecent = async (row) => {
   try {
     if (row.activity === 'Game Outcome') {
       // Delete game
-      await axios.delete(`${import.meta.env.VITE_API_URL}/games/${row._id}`);
+      // await axios.delete(`${import.meta.env.VITE_API_URL}/games/${row._id}`);
+      await axios.delete(`http://localhost:3000/api/games/${row._id}`);
       await fetchRecentGames();
       await fetchTeamStats();
     } else {
@@ -356,7 +359,7 @@ const handleDeleteRecent = async (row) => {
 
 // Call this function when the component is mounted
 onMounted(() => {
-  fetchPlayerBreakdown();
+  // fetchPlayerBreakdown();
   fetchPlayers();
   fetchTeamStats();
   fetchTeamSkillsData();
